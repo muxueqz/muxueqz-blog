@@ -6,6 +6,40 @@ Slug: celery_quickstart
 Author: muxueqz
 Summary: Celery快速上手
 
+## Celery介绍
+
+celery(芹菜)是一个异步任务队列/基于分布式消息传递的作业队列。
+
+ * 它侧重于实时操作，但对调度支持也很好。
+ * celery用于生产系统每天处理数以百万计的任务。
+ * celery是用Python编写的，但该协议可以在任何语言实现。它也可以用其他语言通过webhooks实现。
+  1. 目前已知有php/ruby/nodejs的实现
+
+### 为什么用Celery?
+* 异步
+ * 耗时久的事儿可以扔给 Worker 处理，处理完可以触发子任务提醒
+* 天然的并发能力(多进程/协程)!
+* 非常方便添加 Worker 来增强处理能力
+* Celery提供了Web方式的监控/报警，这样，我们就可以监控每个任务的情况了
+* 出现错误可以自动处理/重试
+
+
+
+### 角色介绍
+
+**Brokers**: 提供队列服务，Celery支持的Brokers有:
+
+  * RabbitMQ(**推荐**)
+  * Redis
+  * MongoDB
+  * Beanstalk
+  * CouchDB
+  * SQLAlchemy(MySQL/PostgreSQL/Sqlite/Oracle)
+  * Amazon SQS等
+
+**Worker**: 真正干活的，实际运行任务的节点。
+
+
 ## 开始 Celery 的第一步
 
 ### 选择你的 Broker
@@ -97,7 +131,7 @@ note:
 
         $ celery -A tasks worker --loglevel=info
 
-== 运行 worker 服务器 ==
+### 运行 worker 服务器
 
 为了方便测试，我们将在前台运行 worker 服务器，这样我们就能在终端上看到 celery 上发生的事情:
 
@@ -111,7 +145,7 @@ note:
 
 supervisord: [[http://supervisord.org]]
 
-== 执行任务（task） ==
+### 执行任务（task）
 
 我们通过调用 class 类的 `~celery.task.base.Task.delay` 方法执行任务。
 
