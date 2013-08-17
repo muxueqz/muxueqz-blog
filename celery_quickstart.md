@@ -1,10 +1,10 @@
-Title: Celery快速上手
+Title: 分布式任务队列Celery快速上手
 Date: 2013-08-17 13:20
 Tags: python,redis,celery,server
 Category: Python
 Slug: celery_quickstart
 Author: muxueqz
-Summary: Celery快速上手
+Summary: 分布式任务队列Celery快速上手
 
 ## Celery介绍
 
