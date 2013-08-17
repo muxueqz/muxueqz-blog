@@ -1,0 +1,45 @@
+3322.org动态域名
+##########################################################################################################################################
+:date: 2009-06-15 11:57:19
+:category: 系统运维
+:slug: 3322
+
+话说3322.org真是好用，在http://www.3322.org中申请，以下是在Linux中的使用方法
+ 脚本一:(cnc提供)
+
+::
+
+    usr="USER"; pwd="PASSWD"; domain="DOMAIN.3322.org"
+     url="http://www.3322.org/dyndns/update?system=dyndns&hostname=$domain"
+     wget -q --http-user=$usr --http-password=$pwd "$url" -O -
+
+
+解释：USER替换成你的用户名，PASSWD替换成你的密码，DOMIAN.3322.org替换成你的希网动态域名就好了。
+ 脚本二:(knowfarway提供)
+ 在 /etc/crontab 中写入下行，系统每3分钟运行一次命令。
+
+::
+
+    \*/3 \* \* \* \* [usr] w3m -no-cookie -dump
+    “http://[user]:[passwd]@members.3322.org/dyndns/update?system=dyndns&hostname=
+     [domain].3322.org”
+
+ 除了以上的方法，我还写了一个adsl拨号用的:
+ 在/etc/ppp/ip-up末尾写入下行，每次拨号时运行一次该命令
+
+::
+
+    w3m -no-cookie -dump
+    “http://[user]:[passwd]@members.3322.org/dyndns/update?system=dyndns&hostname=[domain].3322.org”
+    >>
+     /home/[usr]/adsl.log
+
+ 脚本三:(be00提供)
+
+::
+
+ zhanggang@T60:~$ crontab -l
+
+    \*/30 \* \* \* \* /usr/bin/lynx -mime\_header -auth=USER:PASSWD
+    “http://www.3322.org/dyndns/update?system=dyndns&
+     hostname=DOMAIN.3322.org”

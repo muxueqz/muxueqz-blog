@@ -1,0 +1,151 @@
+运维SA Gtalk群
+##########################################################################################################################################
+:date: 2010-11-04 08:53:28
+:category: 系统运维
+:slug: 87
+
+Linuxtone Gtalk群:linuxtonegroup@appspot.com 
+ 无广告，详见http://goo.gl/z1xBf #linuxtone
+ 架设方法(参考http://tiant.me/archives/22)：
+ 地址在
+ http://io43.com/io43.GtalkGroup/install.html
+ 1、用GAE创建应用程序，比如：yourname.appspot.com
+ 2、下载并安装 Python 和 Google App Engine SKD
+ 直接下载地址: Python \| Google App Engine SDK
+ 3、下载gtalkgroups
+ http://io43.com/downloads/io43.gtalkgroups.tar.gz
+ (sha1sum: 62dfd10e72ee7e3e640019d3e 2f213930e51cd49 / md5sum: 14e5ccc8f81511c673cff16eeb6f5b5f)
+ 或download from svn of google code : svn checkout http://gtalkgroups.googlecode.com/svn/trunk/gtalkgroups-read-only
+ 4、解压缩 gtalk\_groups 文件夹至 Google App Engine SDK 安装目录，如我的是:/tmp/google\_appengine/，则tar xvf
+io43.gtalkgroups.tar.gz -C /tmp/google\_appengine/
+ 5、打开 gtalk\_groups 文件夹内的 app.yaml 文件，修改第一行 your\_application\_name 为刚才输入的 Application Identifier，yourname.appspot.com 中的yourname 把url: /chatbridge\_entry.abcdef 改成你想要的名字（我随便写的= =，比如acg.cnm）
+ 6、打开刚解压的 gtalk\_groups 文件夹内的 m2ggg\_config.py 文件，修改
+root\_mail . admin’s mail,为你自己的邮箱 把 protect\_key1,protect\_key2. 改成两个随机数.
+ 7、上传 gtalk\_groups 到GAE
+ cd /tmp/google\_appengine/，然后输入: appcfg.py update gtalk\_groups，回车，会要求你输入 Google 账户及密码，等待上传完成。
+ 8、等待
+ 打开自己的GAE,进入该应用程序的管理界面，进入data→Datastore Indexes
+ 等待右侧的status 变成serving 
+ 9、打开gtalk，添加机器人yourname@appspot.com
+
+10、大功告成！各种加人、改名的参数详细参见http://www.io43.com/io43.GtalkGroup/cmds/
+ 识别 
+ 每个群成员，都包括4个识别字串：电邮,ID,FID,昵称 电邮（对于GAE XMPP/GTALK就是用户的Google账户）是固定的，只有管理员可看到。
+
+ID是根据系统配置和电邮生成的唯一不变字串，用于在没有电邮资料的情况下识别不同的用户。
+
+FID是用户自己指定的ID，为跟ID作区分，所以叫FID。为避免跟昵称一样可以随意修改，FID只能设置一次。
+ 昵称可以随意变化，但是同一时间群内不能出现有两个用户使用同一昵称。
+ 每句话都有如下两种形式之一显示是哪个用户发出的：
+ Hello(helloworld) 
+ 或者 
+ Hello(@io43\|\|helloworld) 
+ Hello是用户昵称。
+ helloworld或者@io43\|\|helloworld是用户的FID。
+ 当helloworld的形式是FID的时候，表示此用户是群内用户。
+
+当用户是@io43\|\|helloworld的形式是FID的时候，表示此用户是另外一个群或者系统的用户，通过外连接Bridge发送消息到这个群的。
+ 添加成员 
+
+由于GAE程序不能识别出谁增加了自己作好友（Google没有提供这个接口），所以用户添加了“群”作好友的时候，必须发一条系统才会提示管理员有新人加入。
+
+ 管理员看到消息，使用 //allok 或者 //add 指令添加用户即可。 
+ 扩展信息通道(Bridge) 
+
+为了避免单个群资源耗尽，为了可以让多个群一起合并起来或者在群内引入其他消息源。io43.GtalkGroup提供了Bridge连接功能。其概念是把群同时看成一个Hub，每配置Bridge都是设置route。只要正确通过 //addrouterecv 和 //addroutesend
+或编写对应的程序即可实现群合并或引入如Twitter等其他信息源。 
+
+ 延时 
+
+GAE程序是使用循环体发送消息的，而且GAE提供的接口皆有一定延时，所以架构在GAE上的群是会根据系统的具体情况可以达到数秒的误差。
+
+ UserCmd (普通用户指令) 
+ //online 
+ 用途：显示在线人员名单 
+ //nick 
+ 用途：设置昵称 
+ 示例：//nick 你好 
+ 说明：如果群里有其他人使用相同昵称则该昵称不能设置 
+ //setid 
+ 用途：设置FID 
+ 示例：//setid hello 
+
+说明：如果群里有其他人使用相同FID则该昵称不能设置。FID只能设置一次，重设无效。
+
+ //block 
+ 用途：屏蔽某人的消息 
+ 示例：//block hello 
+
+说明：后面所跟的参数为FID。上面示例所的执行结果是屏蔽了FID为hello的用户的消息。
+
+ //unblock 
+ 用途：取消屏蔽某人的消息 
+ 示例：//unblock hello 
+
+说明：后面所跟的参数为FID。上面示例所的执行结果是取消屏蔽FID为hello的用户的消息。
+
+ //m 
+ 用途：给某人发送私密消息 
+ 示例：//m hello helloworld 
+
+说明：后面所跟的参数为FID和内容。上面示例所的执行结果是把私密消息helloworld发送到FID为hello的这个用户。发送成功会显示OK的。目前不能发送消息给形如@\*\*\*\|\|\*\*\* 这样的外连接用户。 
+
+ //showinfo 
+ 用途：显示某人的基本信息 
+ 示例：//showinfo hello 
+
+说明：后面所跟的参数为FID。上面示例所的执行结果是输出FID为hello的用户的基本资料。
+
+ //stop 
+ 用途：马上停止接收群内消息，直到若干秒后恢复 
+ 示例：//stop 3600 
+
+说明：后面所跟的参数为秒数。上面示例所的执行结果是在一小时（3600秒）内不接收群内消息。如果重复输入此命令，时间不会叠加，以最后的一次执行为准。如果执行//stop -1，则取消屏蔽，马上显示消息。 
+
+ //continue 
+ 用途：停止屏蔽群内消息，作用等同于//stop -1 
+ //help 
+ 用途：输出帮助内容——指令的简单说明。 
+ AdminCmd（管理员指令） 
+ //whois 
+ 用途：查看某人消息 
+ 示例：//whois hello 
+
+说明：参数必须为FID。使用whois可以获取用户的电邮，以供后面的其他指令作为参数用。
+
+ //blacklist 
+ 用途：将某人加入群黑名单 
+ 示例：//blacklist somebody.you.want.to.disable@gmail.com 
+ 说明：参数为用户email 
+ //pass 
+ 用途：把某人从黑名单上移除 
+ 示例：//pass remove.from.blacklist@gmail.com 
+ 说明：参数为用户email 
+ //admin 
+ 用途：设置某人为管理员 
+ 示例：//admin admin.of.group@gmail.com 
+ 说明：参数为用户email 
+ //unadmin 
+ 用途：解除某人的管理员身份 
+ 示例：//unadmin not.a.admin.of.group@gmail.com 
+ 说明：参数为用户email 
+ //add 
+ 用途：增加一个成员 
+ 示例：//add new.member@gmail.com 
+ 说明：填写email，若email为已有成员，则执行指令后用户资料会被重新初始化。
+
+ //addrouterecv 
+ 用途：创建HTTP消息接收通道。 
+ 示例：//addrouterecv mychannel2 hello.mypassword2 mychannel1 
+
+说明：后跟3个参数，分别是名字、密码和回路禁止。示例的执行结果是：创建一个外挂消息接收点，名字叫mychannel2，密码是hello.mypassword2，收到的消息不用重新转发给mychannel1
+
+ //addroutesend 
+ 用途：创建HTTP消息发送通道 
+ 示例：//addroutesend mychannel1 hello.mypassword1 http://some.of.mychannel1.some.appspot.program 
+
+说明：后跟3个参数，分别是名字、密码和接收消息的地址。示例的执行结果是：建一个外挂消息发送器，名字叫mychannel1，密码是hello.mypassword1，消息发送到http://some.of.mychannel1.some.appspot.program上。若在服务器http://some.of.mychannel1.some.appspot.program创建同样的名字和密码（mychannel1和hello.mypassword1）的接收点，并禁止回路mychannel2，则对方会收到此聊天群发出的消息，并且不回送。
+ //allok 
+ 用途：通过所有没有进入群的用户 
+ //listuser 
+ 保留，原意是提供用户列表，但是GAE后台能显示，所以没有加上 

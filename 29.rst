@@ -1,0 +1,13 @@
+Linux Fetion(libfetion) for Debian的deb包
+##########################################################################################################################################
+:date: 2009-09-13 12:31:41
+:category: 系统运维
+:slug: 29
+
+软件主页：http://libfetion.cn/
+ 官方打的包是针对Ubuntu的，不知为何我运行不了。所以自己费些劲，打了个包。
+ 下载地址:
+
+`http://210.56.192.43/xyj/Downloads/linux-fetion\_1.0.0-debian\_5\_i386.deb`_
+
+.. _`http://210.56.192.43/xyj/Downloads/linux-fetion\_1.0.0-debian\_5\_i386.deb`: http://210.56.192.43/xyj/Downloads/linux-fetion_1.0.0-debian_5_i386.deb

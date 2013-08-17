@@ -1,0 +1,43 @@
+我的奥体     ——snowleaf 更新
+##########################################################################################################################################
+:date: 2010-01-26 08:21:58
+:category: 系统运维
+:slug: 48
+
+|image0|
+ |image1|
+ |image2|
+ |image3|
+  
+ |image4|
+ |image5|
+ |image6|
+ |image7|
+ |image8|\ |image9|\ |image10|
+ |image11|
+  
+ |image12|
+ |image13|
+ |image14|
+ |image15|
+ |image16|\ |image17|
+  
+
+.. |image0| image:: http://pic8.bai.sohu.com.cn/a/2010/01/22/14/50/5288e096956cdc_0.jpg
+.. |image1| image:: http://pic5.bai.sohu.com.cn/a/2010/01/22/14/53/71be40dd2c437_0.jpg
+.. |image2| image:: http://pic2.bai.sohu.com.cn/a/2010/01/22/14/53/71be40dd2c446_0.jpg
+.. |image3| image:: http://pic4.bai.sohu.com.cn/a/2010/01/22/14/53/52890a9d166da2_0.jpg
+.. |image4| image:: http://pic8.bai.sohu.com.cn/a/2010/01/22/14/54/71bf1fb8a2cff_0.jpg
+.. |image5| image:: http://pic2.bai.sohu.com.cn/a/2010/01/22/14/54/71bf1fb8a2d05_0.jpg
+.. |image6| image:: http://pic8.bai.sohu.com.cn/a/2010/01/25/11/42/536a5c047d3e86_0.jpg
+.. |image7| image:: http://pic6.bai.sohu.com.cn/a/2010/01/22/14/54/52891871efee8d_0.jpg
+.. |image8| image:: http://pic6.bai.sohu.com.cn/a/2010/01/22/14/54/71bf1fb8a2d28_0.jpg
+.. |image9| image:: http://pic1.bai.sohu.com.cn/a/2010/01/25/09/14/53624920d17fdb_0.jpg
+.. |image10| image:: http://pic1.bai.sohu.com.cn/a/2010/01/22/14/55/5289267f725d4a_0.jpg
+.. |image11| image:: http://pic5.bai.sohu.com.cn/a/2010/01/22/14/55/71c0047ac31c8_0.jpg
+.. |image12| image:: http://pic6.bai.sohu.com.cn/a/2010/01/22/14/55/5289267f725d64_0.jpg
+.. |image13| image:: http://pic8.bai.sohu.com.cn/a/2010/01/22/14/51/5288eea905e1fc_0.jpg
+.. |image14| image:: http://pic8.bai.sohu.com.cn/a/2010/01/22/14/50/71bba1522d3fb_0.jpg
+.. |image15| image:: http://pic7.bai.sohu.com.cn/a/2010/01/22/14/48/71b9e418edb67_0.jpg
+.. |image16| image:: http://pic2.bai.sohu.com.cn/a/2010/01/22/14/48/71b9e418edb48_0.jpg
+.. |image17| image:: http://pic7.bai.sohu.com.cn/a/2010/01/22/14/44/52888ceabc415d_0.jpg
