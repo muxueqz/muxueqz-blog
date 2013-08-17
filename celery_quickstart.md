@@ -50,9 +50,9 @@ Broker 是一种负责接收、发送任务消息（task messages）的服务
 按照惯例，我们将调用模块 `file`:`tasks.py`，看起来会像这个样子：
 
 `file`:`tasks.py`
+
     :::python
     from celery.task import task
-
     @task
     def add(x, y):
         return x + y
@@ -160,9 +160,9 @@ CELERY_TASK_RESULT_EXPIRES = 300
 
 现在，我们配置好了保存结果的后端，让我们重新来执行任务。我们再次使用类 `~celery.result.AsyncResult`:
 
-{{{
-#!python
->>> result = add.delay(4, 4)
+
+    :::python
+    >>> result = add.delay(4, 4)
 }}}
 
 这里是一些你可以如何处理结果的方法:
