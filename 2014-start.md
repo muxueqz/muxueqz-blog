@@ -1,12 +1,15 @@
 ## 技术
 1. Dpark
+ - 用到Dpark的项目越来越多
 2. ElasticSearch
  - 流量统计系统的结果量太多，原来的Oracle RDBMS遇到瓶颈(查询效率低/空间扩容不易)
  - 所以迁移到ElasticSearch
 3. Celery
 4. Hadoop
  - 单纯的Map Reduce没Dpark那么好用
+ - 但生态系统更完整，所以只好用了
 5. Ansible
+ - 批量部署/更新很好用，之前的用法太简陋了，这才体会到高级的地方
 
 ## 工作
 1. 填了一些坑
