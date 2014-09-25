@@ -4,7 +4,6 @@ Tags: python,redis,celery,server
 Category: Python
 Slug: celery_quickstart
 Author: muxueqz
-Summary: 分布式任务队列Celery快速上手
 
 ## Celery介绍
 
