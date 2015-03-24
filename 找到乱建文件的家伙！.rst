@@ -17,12 +17,14 @@
 第二天查看监控结果
 
 ::
+
  ausearch -k php_app_change | less
 
 用/搜索CREATE
 有用内容如下：
 
 ::
+
  time->Mon Mar 23 23:59:02 2015
  type=PATH msg=audit(1427126342.023:1289345): item=1 name="/data/logs/app/http_access.log" inode=3418062 dev=fd:00 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=unconfined_u:object_r:default_t:s0 nametype=CREATE
  type=PATH msg=audit(1427126342.023:1289345): item=0 name="/data/logs/app/" inode=3417449 dev=fd:00 mode=040755 ouid=500 ogid=500 rdev=00:00 obj=unconfined_u:object_r:default_t:s0 nametype=PARENT
@@ -32,6 +34,7 @@
 由此可见，是用root运行的php导致，再看对应的ppid(父进程号):
 
 ::
+
  #21#root@ctc-bjlg-xoyo-web19-KIDC160630 ~]$ ps aux | grep 8923
    root      8923  0.0  0.0 106232  1472 ?        S    Mar15  11:05 sh /data/cli/watchdog.sh
 
