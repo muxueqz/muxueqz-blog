@@ -31,7 +31,7 @@ steps:
     force: true
     commit: true
     path: ./kun/public
-    key:
+    ssh_key:
       from_secret: GIT_PUSH_SSH_KEY
 ---
 kind: signature
