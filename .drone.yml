@@ -21,3 +21,11 @@ steps:
   - mv -v ../muxueqz-blog/ srcs
   - mkdir -pv public/tags/
   - ./build
+
+- name: git_push
+  image: appleboy/drone-git-push
+  branch: master
+  remote: git@git.coding.net:muxueqz/muxueqz.git
+  force: true
+  commit: true
+  path: ./public
