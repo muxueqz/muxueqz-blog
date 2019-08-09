@@ -29,6 +29,9 @@ cache:
 script:
   # - nimble install -y nwt
   # - nimble install -y markdown
+  - cp -a . ./srcs
   - git clone --depth=1 https://github.com/muxueqz/kun
+  - rm -rf kun/srcs
+  - mv ./srcs kun/
   # - nim c -r build.nim
   - docker run --rm -v `pwd`/kun:/usr/src/app -v `pwd`:/usr/src/app/srcs -w /usr/src/app nimlang/nim /bin/sh -c "nimble install -y nwt markdown; nim c -r build.nim"
