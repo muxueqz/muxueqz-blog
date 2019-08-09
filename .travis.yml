@@ -15,6 +15,7 @@ env:
 cache:
   directories:
     - "$HOME/.choosenim/toolchains/nim-0.20.2"
+    - "$HOME/.kun/kun
 
 # install:
   # - export CHOOSENIM_CHOOSE_VERSION=$BRANCH
@@ -33,4 +34,8 @@ script:
   - rm -rf kun/srcs/*.md
   - cp -a ./*.md kun/srcs/
   # - nim c -r build.nim
-  - docker run --rm -v `pwd`/kun:/usr/src/app -w /usr/src/app nimlang/nim /bin/sh -c "nimble install -y nwt markdown; nim c -d:release -r build.nim"
+  - docker run --rm -v `pwd`/kun:/usr/src/app -w /usr/src/app nimlang/nim /bin/sh -c "nimble install -y nwt markdown; nim c -d:release build.nim"
+  - mkdir -pv $HOME/.kun/
+  - mv build  $HOME/.kun/kun
+  - cd kun
+  - $HOME/.kun/kun
