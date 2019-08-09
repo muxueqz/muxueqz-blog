@@ -9,7 +9,6 @@ steps:
   image: docker:git
   commands:
   - git clone https://github.com/muxueqz/kun.git
-  - git checkout $DRONE_COMMIT
 
 - name: build
   image: nimlang/nim
