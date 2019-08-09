@@ -6,10 +6,11 @@ clone:
   depth: 1
 
 steps:
-- name: clone engine
+- name: clone
   image: docker:git
   commands:
   - git clone --depth=1 https://github.com/muxueqz/kun.git
+  - git clone --depth=1 https://github.com/muxueqz/muxueqz-blog.git
 
 # - name: clone post
   # image: docker:git
