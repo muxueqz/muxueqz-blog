@@ -13,6 +13,8 @@ Summary: 体验InfluxDB(TICK)
 * Chronograf：Web Dashboard，展示采集到的数据图表，高度自定义，且默认带了许多非常好的Dashboard模板，还可以通过chronograf在Web上配置kapacitor的报警规则，非常方便
 * Kapacitor：数据处理器，用于判断是否报警
 
+**友情提示：本文在PC浏览器上访问效果最佳**
+
 
 ## 下载
 ```bash
