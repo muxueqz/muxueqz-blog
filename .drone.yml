@@ -3,14 +3,18 @@ kind: pipeline
 name: default
 
 clone:
-  disable: true
+  depth: 1
 
 steps:
-- name: clone
+- name: clone engine
   image: docker:git
   commands:
-  - git clone https://github.com/muxueqz/kun.git
-  - git clone https://github.com/muxueqz/muxueqz-blog.git
+  - git clone --depth=1 https://github.com/muxueqz/kun.git
+
+# - name: clone post
+  # image: docker:git
+  # commands:
+  # - git clone https://github.com/muxueqz/muxueqz-blog.git
 
 - name: build
   image: nimlang/nim
