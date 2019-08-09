@@ -30,3 +30,4 @@ steps:
     force: true
     commit: true
     path: ./kun/public
+    key: GIT_PUSH_SSH_KEY
