@@ -25,3 +25,5 @@ script:
   - nimble install -y nwt
   - nimble install -y markdown
   - nim c -r build.nim
+  - ls -alht
+  - ls -alht muxueqz/muxueqz-blog
