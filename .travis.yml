@@ -22,6 +22,6 @@ before_script:
   - export PATH=$HOME/.nimble/bin:$PATH
 
 script:
-  - nimble install nwt
-  - nimble install markdown
+  - nimble install -y nwt
+  - nimble install -y markdown
   - nim c -r build.nim
