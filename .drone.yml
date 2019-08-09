@@ -19,4 +19,5 @@ steps:
   - nim c -d:release build.nim
   - rm -rf srcs
   - mv -v ../muxueqz-blog/ srcs
+  - mkdir -pv public/tags/
   - ./build
