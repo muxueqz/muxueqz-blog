@@ -24,8 +24,9 @@ steps:
 
 - name: git_push
   image: appleboy/drone-git-push
-  branch: master
-  remote: git@git.coding.net:muxueqz/muxueqz.git
-  force: true
-  commit: true
-  path: ./kun/public
+  settings:
+    branch: master
+    remote: git@git.coding.net:muxueqz/muxueqz.git
+    force: true
+    commit: true
+    path: ./kun/public
