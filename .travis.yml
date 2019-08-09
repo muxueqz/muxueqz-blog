@@ -1,0 +1,27 @@
+os:
+  - linux
+  - osx
+
+language: c
+
+env:
+  - BRANCH=0.20.2
+
+cache:
+  directories:
+    - "$HOME/.choosenim/toolchains/nim-0.20.2"
+
+install:
+  - export CHOOSENIM_CHOOSE_VERSION=$BRANCH
+  - |
+      curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
+      sh init.sh -y
+      nimble install nwt
+      nimble install markdown
+
+before_script:
+  - export CHOOSENIM_NO_ANALYTICS=1
+  - export PATH=$HOME/.nimble/bin:$PATH
+
+script:
+  - nim c -r build.nim
