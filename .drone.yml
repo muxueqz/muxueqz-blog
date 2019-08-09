@@ -3,7 +3,8 @@ kind: pipeline
 name: default
 
 clone:
-  depth: 1
+  # depth: 1
+  disable: true
 
 steps:
 - name: clone
