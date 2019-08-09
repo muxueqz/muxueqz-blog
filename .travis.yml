@@ -33,4 +33,4 @@ script:
   - rm -rf kun/srcs/*.md
   - cp -a ./*.md kun/srcs/
   # - nim c -r build.nim
-  - docker run --rm -v `pwd`/kun:/usr/src/app -w /usr/src/app nimlang/nim /bin/sh -c "nimble install -y nwt markdown; nim c -r build.nim"
+  - docker run --rm -v `pwd`/kun:/usr/src/app -w /usr/src/app nimlang/nim /bin/sh -c "nimble install -y nwt markdown; nim c -d:release -r build.nim"
