@@ -9,6 +9,7 @@ steps:
   image: docker:git
   commands:
   - git clone https://github.com/muxueqz/kun.git
+  - git clone https://github.com/muxueqz/muxueqz-blog.git
 
 - name: build
   image: nimlang/nim
@@ -16,3 +17,6 @@ steps:
   - nimble install -y nwt markdown
   - cd kun
   - nim c -d:release build.nim
+  - rm -rf srcs
+  - mv -v ../muxueqz-blog/ srcs
+  - ./build
