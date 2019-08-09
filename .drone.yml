@@ -28,4 +28,4 @@ steps:
   remote: git@git.coding.net:muxueqz/muxueqz.git
   force: true
   commit: true
-  path: ./public
+  path: ./kun/public
