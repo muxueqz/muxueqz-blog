@@ -18,9 +18,9 @@ Author: muxueqz
 1. 编译静态博客构建工具
 1. 构建静态页面
 1. 通过git push部署到git仓库，我用的是国内的coding.net，需要注意的是：
-  * SSH密钥通过Drone的secret来存取，而不暴露在公开的git仓库中（因为`.drone.yml`是在公开的git仓库中）
-  * 需要在coding.net的仓库中添加Deploy Key并允许推送
-  * 因为我的HTML是托管在coding.net上，所以不能使用Drone的Github Pages插件，找到一个`drone-git-push`，但试了半天都用不了，看Drone的bash插件写起来很简单，索性自己写一个。
+    * SSH密钥通过Drone的secret来存取，而不暴露在公开的git仓库中（因为`.drone.yml`是在公开的git仓库中）
+    * 需要在coding.net的仓库中添加Deploy Key并允许推送
+    * 因为我的HTML是托管在coding.net上，所以不能使用Drone的Github Pages插件，找到一个`drone-git-push`，但试了半天都用不了，看Drone的bash插件写起来很简单，索性自己写一个。
 
 
 # 编写Drone配置文件
