@@ -141,7 +141,7 @@ $ celery -A tasks worker --loglevel=info
 $ celeryd --loglevel=INFO
 ```
 
-在生产环境中，也许你希望将 worker 在后台以守护进程的方式运行。如果你希望这么做，你可以利用平台或者类似于 `supervisord`_ (查阅 :ref:`daemonizing` 以获得更多信息） 的工具来实现。
+在生产环境中，也许你希望将 worker 在后台以守护进程的方式运行。如果你希望这么做，你可以利用平台或者类似于 `supervisord` (查阅 :ref:`daemonizing` 以获得更多信息） 的工具来实现。
 
 可以通过下列命令行获得完整的命令参数清单:
 
@@ -149,7 +149,7 @@ $ celeryd --loglevel=INFO
 $  celeryd --help
 ```
 
-supervisord: [[http://supervisord.org]]
+supervisord: [http://supervisord.org](http://supervisord.org)
 
 ### 执行任务（task）
 
