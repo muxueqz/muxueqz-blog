@@ -1,6 +1,6 @@
 Title: 静态博客持续集成大法
 Date: 2019-08-09 22:20
-Tags: DevOps, 系统运维
+Tags: DevOps, 系统运维, nim
 Slug: my-blog-ci
 Author: muxueqz
 
