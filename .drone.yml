@@ -15,6 +15,12 @@ steps:
   # 下载代码
   - git clone --depth=1 https://github.com/muxueqz/muxueqz-blog.git
 
+- name: configure
+  image: appropriate/curl
+  commands:
+  - cd kun
+  - curl -L -o build $(curl 'https://api.github.com/repos/muxueqz/kun/releases/latest' | grep -o '"browser_download_url":[ ]*"[^"]*' | cut -d'"' -f4)
+
 - name: build
   image: ubuntu
   commands:
@@ -26,7 +32,6 @@ steps:
   - mv -v ../muxueqz-blog/ srcs
   - mkdir -pv public/tags/
   # 构建静态页面
-  - curl -L -o build $(curl 'https://api.github.com/repos/muxueqz/kun/releases/latest' | grep -o '"browser_download_url":[ ]*"[^"]*' | cut -d'"' -f4)
   - chmod +x build
   - ./build
 
