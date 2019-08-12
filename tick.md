@@ -8,7 +8,7 @@ Summary: 体验InfluxDB(TICK)
 # 介绍
 近两年技术领域变化真快，新工具层出不穷，InfluxDB作为一款流行的时序数据库，本来就在监控领域应用较广，
 现在它又推出了一系列工具来组成完整的监控系统：
-* Telegraf：采集数据的Agent，支持超多种常见的监控类型，如Nginx/Redis/SNAP以及Windows的服务，以及通过`Exec Input`来实现自定义扩展
+* Telegraf：采集数据的Agent，支持超多种常见的监控类型，如Nginx/Redis/SNAP以及Windows的服务，以及通过[Exec Input](https://docs.influxdata.com/telegraf/v1.11/plugins/plugin-list/#exec)来实现自定义扩展
 * InfluxDB：时序数据库，用于存储采集到的数据
 * Chronograf：Web Dashboard，展示采集到的数据图表，高度自定义，且默认带了许多非常好的Dashboard模板，还可以通过chronograf在Web上配置kapacitor的报警规则，非常方便
 * Kapacitor：数据处理器，用于判断是否报警
