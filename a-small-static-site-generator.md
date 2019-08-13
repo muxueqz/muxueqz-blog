@@ -1,4 +1,4 @@
-Title: 只须五步，自己动手写一个静态博客
+Title: 只需五步，自己动手写一个静态博客
 Date: 2019-08-06 13:20
 Tags: nim
 Slug: a-small-static-site-generator
