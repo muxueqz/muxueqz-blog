@@ -1,11 +1,11 @@
-Title: 自己动手写一个静态博客
+Title: 只须五步，自己动手写一个静态博客
 Date: 2019-08-06 13:20
 Tags: nim
 Slug: a-small-static-site-generator
 Author: muxueqz
 Summary: 原来写一个静态博客如此简单！
 
-# 自己动手写一个静态博客
+# 为什么要自己动手写一个静态博客？
 众所周知，随着Github Pages这样的服务越来越流行，现在像Hexo、Hugo、Pelican这样的静态博客越来越多，
 像我以前就是用`Pelican`的，但因为`Pelican`的依赖比较多（其实是想自己造轮子），
 自从见过`Nim`就一直很想自己写一个静态博客，但总是觉得比较麻烦，
