@@ -5,8 +5,6 @@ Slug: skybook
 Author: muxueqz
 Summary: 轻量级的美味书签替代品
 
-# 一个用Nim语言实现的轻量级书签管理器
-
 [https://github.com/muxueqz/skybook](https://github.com/muxueqz/skybook)
 
 ## 特点
