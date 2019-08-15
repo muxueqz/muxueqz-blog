@@ -60,7 +60,7 @@ type
 var Blockchain: seq[Block]
 ```
 我们使用散列算法（SHA1）来确定和维护链中块和块正确的顺序，确保每一个块的 PrevHash 值等于前一个块中的 Hash 值，这样就以正确的块顺序构建出链：
-![](https://colobu.com/2018/02/05/code-your-own-blockchain-in-less-than-200-lines-of-go/1.png)
+![](https://user-images.githubusercontent.com/730639/63093896-682a1280-bf99-11e9-97b0-0ab62fc2aa03.png)
 
 ### 散列和生成块
 我们为什么需要散列？主要是两个原因：
@@ -105,7 +105,7 @@ proc isBlockValid(newBlock, oldBlock: Block): bool =
 
 除了校验块以外，我们还会遇到一个问题：两个节点都生成块并添加到各自的链上，那我们应该以谁为准？这里的细节我们留到下一篇文章，这里先让我们记住一个原则：始终选择最长的链。
 
-![](https://colobu.com/2018/02/05/code-your-own-blockchain-in-less-than-200-lines-of-go/2.png)
+![](https://user-images.githubusercontent.com/730639/63093900-6ceec680-bf99-11e9-8a78-bfc4095e4793.png)
 
 通常来说，更长的链表示它的数据（状态）是更新的，所以我们需要一个函数
 
@@ -204,3 +204,4 @@ $ curl 127.1:5003/
 刚刚我们完成了一个自己的区块链，虽然很简单（陋），但它具备块生成、散列计算、块校验等基本能力。接下来你就可以继续深入的学习区块链的其他重要知识，比如工作量证明、权益证明这样的共识算法，或者是智能合约、Dapp、侧链等等。
 
 目前这个实现中不包括任何 P2P 网络的内容，我们会在下一篇文章中补充这部分内容，当然，我们鼓励你在这个基础上自己实践一遍！
+
