@@ -2,7 +2,7 @@ Title: 只用65行Nim代码写一个自己的区块链
 Date: 2019-08-15 18:20
 Tags: nim
 Author: muxueqz
-Summary: 原来写一个静态博客如此简单！
+Summary: Nim真的比Go写起来舒服多了
 这篇文章的原文为英文，出自 Coral Health公司: [Code your own blockchain in less than 200 lines of Go!](https://medium.com/@mycoralhealth/code-your-own-blockchain-in-less-than-200-lines-of-go-e296282bcffc)，
 
 本篇转载的译文来自魏佳翻译的: [只用200行Go代码写一个自己的区块链！](http://www.10tiao.com/html/175/201801/2653549361/1.html),高可用架构的公众号
