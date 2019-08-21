@@ -11,6 +11,7 @@ Summary: 轻量级的美味书签替代品
 * 搜索功能：借助浏览器的自定义搜索引擎功能
 * 存储为json文件，可以支持git版本化管理和备份到Github上
 * 本地运行，不依赖网络服务，也不用担心服务器被关
+* 跨平台，支持Linux/Windows/macOS
 
 ## 快速开始
 * 安装好Nim编译器，如果你用Debian GNU/Linux，`apt install nim`即可
