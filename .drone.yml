@@ -42,7 +42,7 @@ steps:
   image: muxueqz/drone-git-push-by-bash
   settings:
     branch: master
-    remote: git@git.coding.net:muxueqz/muxueqz.git
+    remote: git@e.coding.net:muxueqz/muxueqz.git
     force: true
     commit: true
     path: ./kun/public
