@@ -31,7 +31,7 @@ import ckb_syscall
 
 
 proc main: clong {.exportc: "_start".} =
-   ckb_debug("Hello world")
+   ckb_debug("hello world")
    ckb_exit 0
 ```
 
@@ -51,10 +51,10 @@ docker run -w /data/ -v $PWD:/data  -it --rm muxueqz/ckb-standalone-debugger-plu
 如果得到的结果如下，那就说明可以正常运行了
 ```
 Executing: /opt/debugger/ckb-debugger --tx-file tx.json --script-group-type type -i 0 -e input
-DEBUG:<unknown>: script group: Byte32(0x3c522e7cb6ab58c3f50ab48e9e75412b3af99370125f6efb224b4e3e53f9085c) DEBUG OUTPUT: Hello world
+DEBUG:<unknown>: script group: Byte32(0xe858b26d459d418fa5f78a8dd6c639cb7714942816caacb9749830e5203f31ac) DEBUG OUTPUT: hello world
 Run result: Ok(0)
-Total cycles consumed: 1597
-Transfer cycles: 60, running cycles: 1537
+Total cycles consumed: 1091
+Transfer cycles: 56, running cycles: 1035
 ```
 
 
