@@ -25,7 +25,7 @@ git clone https://github.com/muxueqz/ckb-nim-builder.git --recurse-submodules
 
 ## 编写测试合约
 
-将以下内容保存为hello.nim：
+用Nim编写合约的代码如下：
 ```nim
 import ckb_syscall
 
@@ -37,12 +37,13 @@ proc main: clong {.exportc: "_start".} =
 
 ## 编译成链上可运行的二进制
 ```bash
-docker run -w /app -v $PWD/:/app -it --rm muxueqz/ckb-nim-builder bash -x /app/build.sh hello.nim
+cd ckb-nim-builder.git
+docker run -w /app -v $PWD/:/app -it --rm muxueqz/ckb-nim-builder bash -x /app/build.sh example.nim
 ```
 
 ## 测试编译出来的二进制能不能运行
 ```bash
-docker run -w /data/ -v $PWD:/data  -it --rm muxueqz/ckb-standalone-debugger-plus:latest /data/pkg/hello 0x10000000
+docker run -w /data/ -v $PWD:/data  -it --rm muxueqz/ckb-standalone-debugger-plus:latest /data/example 0x10000000
 ```
 
 如果得到的结果如下，那就说明可以正常运行了
