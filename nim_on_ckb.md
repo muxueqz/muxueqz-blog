@@ -43,7 +43,7 @@ cd ckb-nim-builder
 docker run -w /app -v $PWD/:/app -it --rm muxueqz/ckb-nim-builder bash -x /app/build.sh example.nim
 ```
 
-## 测试编译出来的二进制能不能运行
+## 用学姐的ckb-standalone-debugger测试编译出来的二进制能不能运行
 ```bash
 docker run -w /data/ -v $PWD:/data  -it --rm muxueqz/ckb-standalone-debugger-plus:latest /data/example 0x10000000
 ```
