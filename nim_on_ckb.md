@@ -1,4 +1,4 @@
-Title: 在CKB上运行nim程序
+Title: 用Nim语言开发CKB合约
 Date: 2020-06-09 22:20
 Tags: nim
 Category: nim
