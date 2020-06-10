@@ -35,9 +35,11 @@ proc main: clong {.exportc: "_start".} =
    ckb_exit 0
 ```
 
-## 编译成链上可运行的二进制
+这份代码在`ckb-nim-builder`已经有了：`example.nim`
+
+## 接下来我们把它编译成链上可运行的二进制：
 ```bash
-cd ckb-nim-builder.git
+cd ckb-nim-builder
 docker run -w /app -v $PWD/:/app -it --rm muxueqz/ckb-nim-builder bash -x /app/build.sh example.nim
 ```
 
