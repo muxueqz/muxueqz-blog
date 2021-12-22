@@ -39,11 +39,9 @@ steps:
 
 # 通过git push部署到git仓库，我用的是国内的coding.net
 - name: git_push
-  # image: muxueqz/drone-git-push-by-bash
   image: ghcr.io/muxueqz/drone-git-push-by-bash:master
   settings:
     branch: pages
-    # remote: git@git.coding.net:muxueqz/muxueqz.git
     remote: git@github.com:muxueqz/muxueqz-blog.git
     force: false
     commit: true
