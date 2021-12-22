@@ -55,6 +55,6 @@ steps:
   image: plugins/gh-pages
   settings:
     pages_directory: /
-    upstream_name: pages
+    target_branch: pages
     ssh_key:
       from_secret: GIT_PUSH_SSH_KEY
