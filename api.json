@@ -1,0 +1,58 @@
+{
+  "info": {
+    "title": "统一权限管理系统",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/policy/add": {
+      "post": {
+        "summary": "授权资源给用户",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/policy/enforce": {
+      "post": {
+        "summary": "判断用户是否有权限执行某项操作",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/policy/list": {
+      "post": {
+        "summary": "获取用户所有权限",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/policy/remove": {
+      "post": {
+        "summary": "删除授权资源",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/policy/update": {
+      "post": {
+        "summary": "更新策略",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}
