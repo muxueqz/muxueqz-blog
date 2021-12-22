@@ -45,7 +45,7 @@ steps:
     remote: git@github.com:muxueqz/muxueqz-blog.git
     force: false
     init: false
-    commit: true
+    # commit: true
     path: ./kun/public
     ssh_key:
       from_secret: GIT_PUSH_SSH_KEY
