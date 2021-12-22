@@ -54,7 +54,7 @@ steps:
 - name: git_push
   image: plugins/gh-pages
   settings:
-    pages_directory: /
+    pages_directory: ./
     target_branch: pages
     ssh_key:
       from_secret: GIT_PUSH_SSH_KEY
