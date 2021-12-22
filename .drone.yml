@@ -41,7 +41,7 @@ steps:
 - name: git_push
   image: muxueqz/drone-git-push-by-bash
   settings:
-    branch: master
+    branch: pages
     # remote: git@git.coding.net:muxueqz/muxueqz.git
     remote: git@github.com:muxueqz/muxueqz-blog.git
     force: true
