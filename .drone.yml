@@ -46,7 +46,7 @@ steps:
     branch: pages
     remote: git@github.com:muxueqz/muxueqz-blog.git
     force: false
-    init: false
+    # init: false
     # commit: true
     path: ./kun/public
     ssh_key:
