@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="muxueqz">
+  
+<title>新兴监控平台InfluxDB（TICK）初体验 - QingZhuo Blog</title>
+<meta property="og:title" content="新兴监控平台InfluxDB（TICK）初体验 - QingZhuo Blog">
+<meta property="og:tags" content="系统运维,DevOps">
+
+<meta property="og:description" content="体验InfluxDB(TICK)">
+
+<meta property="og:image" content="https://muxueqz.top/static/me.png">
+
+<meta name="twitter:image:alt" content="Avatar for muxueqz">
+
+<meta property="og:url" content="https://muxueqz.top/tick.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@muxueqz">
+
+  <!-- Syntax highlighting css -->
+  <link href="/static/prism.css" rel="stylesheet" />
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+    <link rel="canonical" href="/">
+
+    <style>
+  * {
+    border:0;
+    font:inherit;
+    font-size:100%;
+    vertical-align:baseline;
+    margin:0;
+    padding:0;
+    color: black;
+  }
+
+  body {
+    font-family:'Open Sans', 'Myriad Pro', Myriad, sans-serif;
+    font-size:17px;
+    line-height:160%;
+    color:#1d1313;
+    max-width:700px;
+    margin:auto;
+  }
+
+  p {
+    margin: 20px 0;
+  }
+
+  a img {
+    border:none;
+  }
+
+  img {
+    margin: 10px auto 10px auto;
+    max-width: 100%;
+    display: block;
+  }
+
+  pre, code {
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    background-color: #f7f7f7;
+  }
+
+  code {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  pre {
+    margin-top: 0;
+    margin-bottom: 16px;
+    word-wrap: normal;
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+  }
+
+  pre>code {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    word-break: normal;
+    white-space: pre;
+    background: transparent;
+    border: 0;
+  }
+
+  pre code {
+    display: inline;
+    max-width: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
+    background-color: transparent;
+    border: 0;
+  }
+
+  pre code::before,
+  pre code::after {
+    content: normal;
+  }
+
+  em,q,em,dfn {
+    font-style:italic;
+  }
+
+  .sans,html .gist .gist-file .gist-meta {
+    font-family:"Open Sans","Myriad Pro",Myriad,sans-serif;
+  }
+
+  .mono,pre,code,tt,p code,li code {
+    font-family:Menlo,Monaco,"Andale Mono","lucida console","Courier New",monospace;
+  }
+
+  .heading,.serif,h1,h2,h3 {
+    font-family:"Old Standard TT",serif;
+  }
+
+  strong {
+    font-weight:600;
+  }
+
+  q:before {
+    content:"\201C";
+  }
+
+  q:after {
+    content:"\201D";
+  }
+
+  del,s {
+    text-decoration:line-through;
+  }
+
+  blockquote {
+    font-family:"Old Standard TT",serif;
+    text-align:center;
+    padding:50px;
+  }
+
+  blockquote p {
+    display:inline-block;
+    font-style:italic;
+  }
+
+  blockquote:before,blockquote:after {
+    font-family:"Old Standard TT",serif;
+    content:'\201C';
+    font-size:35px;
+    color:#403c3b;
+  }
+
+  blockquote:after {
+    content:'\201D';
+  }
+
+  hr {
+    width:40%;
+    height: 1px;
+    background:#403c3b;
+    margin: 25px auto;
+  }
+
+  h1 {
+    font-size:35px;
+    line-height:100%;
+  }
+
+  h2 {
+    font-size:28px;
+  }
+
+  h3 {
+    font-size:22px;
+    margin-top:18px;
+  }
+
+  h1 a,h2 a,h3 a {
+    text-decoration:none;
+  }
+
+  h1,h2 {
+    margin-top:28px;
+  }
+
+  #sub-header, time {
+    color:#403c3b;
+    font-size:13px;
+  }
+
+  #sub-header {
+    margin: 0 4px;
+  }
+
+  #nav h1 a {
+    font-size:35px;
+    color:#1d1313;
+    line-height:120%;
+  }
+
+  .posts_listing a,#nav a {
+    text-decoration: none;
+  }
+
+  li {
+    margin-left: 20px;
+  }
+
+  #nav ul li:before, .posts_listing li:before {
+    content:'';
+    margin-right:0;
+  }
+
+  #content {
+    text-align:left;
+    width:100%;
+    font-size:15px;
+    padding:60px 0 80px;
+  }
+
+  #content h1,#content h2 {
+    margin-bottom:5px;
+  }
+
+  #content h2 {
+    font-size:25px;
+  }
+
+  #content .entry-content {
+    margin-top:15px;
+  }
+
+  #content time {
+    margin-left:3px;
+  }
+
+  #content h1 {
+    font-size:30px;
+  }
+
+  .highlight {
+    margin: 10px 0;
+  }
+
+  .posts_listing {
+    margin:0 0 50px;
+  }
+
+  .posts_listing li {
+    margin:0 0 25px 15px;
+  }
+
+  .posts_listing li a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  .posts-list a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  #nav {
+    text-align:center;
+    position:static;
+    margin-top:60px;
+  }
+
+  #nav ul {
+    display: table;
+    margin: 8px auto 0 auto;
+  }
+
+  #nav li {
+    list-style-type:none;
+    display:table-cell;
+    font-size:15px;
+    padding: 0 20px;
+  }
+
+  #links {
+    margin: 50px 0 0 0;
+  }
+
+  #links :nth-child(2) {
+    float:right;
+  }
+
+  #not-found {
+    text-align: center;
+  }
+
+  #not-found a {
+    font-family:"Old Standard TT",serif;
+    font-size: 200px;
+    text-decoration: none;
+    display: inline-block;
+    padding-top: 225px;
+  }
+
+  @media (max-width: 750px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:28px;
+    }
+
+    #nav li {
+      font-size:13px;
+      padding: 0 15px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:50px;
+      font-size:14px;
+    }
+
+    #content h1 {
+      font-size:25px;
+    }
+
+    #content h2 {
+      font-size:22px;
+    }
+
+    .posts_listing li div {
+      font-size:12px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:22px;
+    }
+
+    #nav li {
+      font-size:12px;
+      padding: 0 10px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:20px;
+      font-size:12px;
+    }
+
+    #content h1 {
+      font-size:20px;
+    }
+
+    #content h2 {
+      font-size:18px;
+    }
+
+    .posts_listing li div{
+      font-size:12px;
+    }
+  }
+</style>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+    
+  </head>
+
+  <body>
+    
+<article>
+  <h1>新兴监控平台InfluxDB（TICK）初体验</h1>
+  <aside>
+    <div id="sub-header">
+      2019-08-08 18:20
+            <a class="label" href="/tags/系统运维.html">
+        系统运维
+        </a>
+                <a class="label" href="/tags/DevOps.html">
+        DevOps
+        </a>
+        
+    · <a href="/">view all posts</a>
+    </div>
+  </aside>
+  <content>
+    <h1>介绍</h1>
+<p>近两年技术领域变化真快，新工具层出不穷，InfluxDB作为一款流行的时序数据库，本来就在监控领域应用较广，
+现在它又推出了一系列工具来组成完整的监控系统：</p>
+<ul>
+<li>Telegraf：采集数据的Agent，支持超多种常见的监控类型，如Nginx/Redis/SNAP以及Windows的服务，以及按照<a href="https://docs.influxdata.com/telegraf/latest/data_formats/input/">telegraf的格式</a>通过<a href="https://docs.influxdata.com/telegraf/latest/plugins/plugin-list/#exec">Exec Input</a>来实现自定义扩展</li>
+<li>InfluxDB：时序数据库，用于存储采集到的数据</li>
+<li>Chronograf：Web Dashboard，展示采集到的数据图表，高度自定义，且默认带了许多非常好的Dashboard模板，还可以通过chronograf在Web上配置kapacitor的报警规则，非常方便</li>
+<li>Kapacitor：数据处理器，用于判断是否报警</li>
+</ul>
+<p><strong>友情提示：本文在PC浏览器上访问效果最佳</strong></p>
+<h2>下载</h2>
+<pre><code class="language-bash">wget https://dl.influxdata.com/chronograf/releases/chronograf-1.7.12_linux_amd64.tar.gz
+wget https://dl.influxdata.com/kapacitor/releases/kapacitor-1.5.3_linux_amd64.tar.gz
+wget https://dl.influxdata.com/telegraf/releases/telegraf-1.11.4_linux_amd64.tar.gz
+wget https://dl.influxdata.com/influxdb/releases/influxdb-1.7.7_linux_amd64.tar.gz
+</code></pre>
+<h2>安装</h2>
+<pre><code class="language-bash"># 安装InfluxDB时序数据库
+tar xvf influxdb-1.7.7_linux_amd64.tar.gz
+cd influxdb-1.7.7-1/
+./usr/bin/influxd &amp;&gt; influxd.log &amp;
+cd ..
+# 安装telegraf监控采集Agent
+tar xvf telegraf-1.11.4_linux_amd64.tar.gz
+rsync -av --progress telegraf/ /
+telegraf &amp;&gt; telegraf.log &amp;
+
+# 安装kapacitor报警器
+tar xvf kapacitor-1.5.3_linux_amd64.tar.gz
+rsync  -av --progress kapacitor-1.5.3-1/ /
+useradd -m kapacitor
+chown -R kapacitor /var/run/kapacitor/
+kapacitord &amp;&gt; kapacitord.log &amp;
+
+# 安装chronograf Dashboard
+tar xvf chronograf-1.7.12_linux_amd64.tar.gz
+rsync -av --progress chronograf-1.7.12-1/ /
+useradd -m chronograf
+chown -R chronograf  /var/log/chronograf/
+chronograf  &amp;&gt; chronograf.log &amp;
+</code></pre>
+<h2>体验</h2>
+<p>现在，打开 http://localhost:8888 即可看到chronograf的管理界面了</p>
+<h1>Dashboard效果</h1>
+<h2>报警列表</h2>
+<p><img src="https://user-images.githubusercontent.com/730639/62693655-8033ec00-ba05-11e9-9485-b48bd03275b7.png" alt="image" /></p>
+<h2>InfluxDB状态</h2>
+<p><img src="https://user-images.githubusercontent.com/730639/62693783-b1acb780-ba05-11e9-90c8-0480872b7c60.png" alt="image" /></p>
+<h2>系统状态</h2>
+<p><img src="https://user-images.githubusercontent.com/730639/62693832-cab56880-ba05-11e9-9265-ae2f607277b1.png" alt="image" /></p>
+<h1>总结</h1>
+<p>TICK作为新兴之秀，</p>
+<ul>
+<li>一扫上古监控系统的陈旧气息，界面漂亮且定制性强</li>
+<li>又比其它新秀如Prometheus架构更合理（Prometheus那么多exporter管理起来就是个灾难）</li>
+<li>也比另一个流行的监控系统——OpenFalcon更简单清晰，OpenFalcon那么多组件，理解起来真是头大</li>
+</ul>
+<p>所以还是非常值得关注的，试用的过程中非常顺利，真是非常棒的体验。</p>
+
+  </content>
+</article>
+
+<script src="https://utteranc.es/client.js"
+        repo="muxueqz/muxueqz-blog"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    <section id=nav>
+      <h1><a href="/"></a></h1>
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </section>
+
+
+</body>
+  <!-- Google Analytics (that's right, I'm tracking you) -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+        var pageTracker = _gat._getTracker("UA-33825897-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  <script src="/static/prism.js"></script>
+</html>
+
+

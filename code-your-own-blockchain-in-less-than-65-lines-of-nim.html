@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="muxueqz">
+  
+<title>只用65行Nim代码写一个自己的区块链 - QingZhuo Blog</title>
+<meta property="og:title" content="只用65行Nim代码写一个自己的区块链 - QingZhuo Blog">
+<meta property="og:tags" content="nim">
+
+<meta property="og:description" content="Nim真的比Go写起来舒服多了">
+
+<meta property="og:image" content="https://muxueqz.top/static/me.png">
+
+<meta name="twitter:image:alt" content="Avatar for muxueqz">
+
+<meta property="og:url" content="https://muxueqz.top/code-your-own-blockchain-in-less-than-65-lines-of-nim.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@muxueqz">
+
+  <!-- Syntax highlighting css -->
+  <link href="/static/prism.css" rel="stylesheet" />
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+    <link rel="canonical" href="/">
+
+    <style>
+  * {
+    border:0;
+    font:inherit;
+    font-size:100%;
+    vertical-align:baseline;
+    margin:0;
+    padding:0;
+    color: black;
+  }
+
+  body {
+    font-family:'Open Sans', 'Myriad Pro', Myriad, sans-serif;
+    font-size:17px;
+    line-height:160%;
+    color:#1d1313;
+    max-width:700px;
+    margin:auto;
+  }
+
+  p {
+    margin: 20px 0;
+  }
+
+  a img {
+    border:none;
+  }
+
+  img {
+    margin: 10px auto 10px auto;
+    max-width: 100%;
+    display: block;
+  }
+
+  pre, code {
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    background-color: #f7f7f7;
+  }
+
+  code {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  pre {
+    margin-top: 0;
+    margin-bottom: 16px;
+    word-wrap: normal;
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+  }
+
+  pre>code {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    word-break: normal;
+    white-space: pre;
+    background: transparent;
+    border: 0;
+  }
+
+  pre code {
+    display: inline;
+    max-width: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
+    background-color: transparent;
+    border: 0;
+  }
+
+  pre code::before,
+  pre code::after {
+    content: normal;
+  }
+
+  em,q,em,dfn {
+    font-style:italic;
+  }
+
+  .sans,html .gist .gist-file .gist-meta {
+    font-family:"Open Sans","Myriad Pro",Myriad,sans-serif;
+  }
+
+  .mono,pre,code,tt,p code,li code {
+    font-family:Menlo,Monaco,"Andale Mono","lucida console","Courier New",monospace;
+  }
+
+  .heading,.serif,h1,h2,h3 {
+    font-family:"Old Standard TT",serif;
+  }
+
+  strong {
+    font-weight:600;
+  }
+
+  q:before {
+    content:"\201C";
+  }
+
+  q:after {
+    content:"\201D";
+  }
+
+  del,s {
+    text-decoration:line-through;
+  }
+
+  blockquote {
+    font-family:"Old Standard TT",serif;
+    text-align:center;
+    padding:50px;
+  }
+
+  blockquote p {
+    display:inline-block;
+    font-style:italic;
+  }
+
+  blockquote:before,blockquote:after {
+    font-family:"Old Standard TT",serif;
+    content:'\201C';
+    font-size:35px;
+    color:#403c3b;
+  }
+
+  blockquote:after {
+    content:'\201D';
+  }
+
+  hr {
+    width:40%;
+    height: 1px;
+    background:#403c3b;
+    margin: 25px auto;
+  }
+
+  h1 {
+    font-size:35px;
+    line-height:100%;
+  }
+
+  h2 {
+    font-size:28px;
+  }
+
+  h3 {
+    font-size:22px;
+    margin-top:18px;
+  }
+
+  h1 a,h2 a,h3 a {
+    text-decoration:none;
+  }
+
+  h1,h2 {
+    margin-top:28px;
+  }
+
+  #sub-header, time {
+    color:#403c3b;
+    font-size:13px;
+  }
+
+  #sub-header {
+    margin: 0 4px;
+  }
+
+  #nav h1 a {
+    font-size:35px;
+    color:#1d1313;
+    line-height:120%;
+  }
+
+  .posts_listing a,#nav a {
+    text-decoration: none;
+  }
+
+  li {
+    margin-left: 20px;
+  }
+
+  #nav ul li:before, .posts_listing li:before {
+    content:'';
+    margin-right:0;
+  }
+
+  #content {
+    text-align:left;
+    width:100%;
+    font-size:15px;
+    padding:60px 0 80px;
+  }
+
+  #content h1,#content h2 {
+    margin-bottom:5px;
+  }
+
+  #content h2 {
+    font-size:25px;
+  }
+
+  #content .entry-content {
+    margin-top:15px;
+  }
+
+  #content time {
+    margin-left:3px;
+  }
+
+  #content h1 {
+    font-size:30px;
+  }
+
+  .highlight {
+    margin: 10px 0;
+  }
+
+  .posts_listing {
+    margin:0 0 50px;
+  }
+
+  .posts_listing li {
+    margin:0 0 25px 15px;
+  }
+
+  .posts_listing li a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  .posts-list a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  #nav {
+    text-align:center;
+    position:static;
+    margin-top:60px;
+  }
+
+  #nav ul {
+    display: table;
+    margin: 8px auto 0 auto;
+  }
+
+  #nav li {
+    list-style-type:none;
+    display:table-cell;
+    font-size:15px;
+    padding: 0 20px;
+  }
+
+  #links {
+    margin: 50px 0 0 0;
+  }
+
+  #links :nth-child(2) {
+    float:right;
+  }
+
+  #not-found {
+    text-align: center;
+  }
+
+  #not-found a {
+    font-family:"Old Standard TT",serif;
+    font-size: 200px;
+    text-decoration: none;
+    display: inline-block;
+    padding-top: 225px;
+  }
+
+  @media (max-width: 750px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:28px;
+    }
+
+    #nav li {
+      font-size:13px;
+      padding: 0 15px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:50px;
+      font-size:14px;
+    }
+
+    #content h1 {
+      font-size:25px;
+    }
+
+    #content h2 {
+      font-size:22px;
+    }
+
+    .posts_listing li div {
+      font-size:12px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:22px;
+    }
+
+    #nav li {
+      font-size:12px;
+      padding: 0 10px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:20px;
+      font-size:12px;
+    }
+
+    #content h1 {
+      font-size:20px;
+    }
+
+    #content h2 {
+      font-size:18px;
+    }
+
+    .posts_listing li div{
+      font-size:12px;
+    }
+  }
+</style>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+    
+  </head>
+
+  <body>
+    
+<article>
+  <h1>只用65行Nim代码写一个自己的区块链</h1>
+  <aside>
+    <div id="sub-header">
+      2019-08-15 18:20
+            <a class="label" href="/tags/nim.html">
+        nim
+        </a>
+        
+    · <a href="/">view all posts</a>
+    </div>
+  </aside>
+  <content>
+    <p>这篇文章的原文为英文，出自 Coral Health公司: <a href="https://medium.com/@mycoralhealth/code-your-own-blockchain-in-less-than-200-lines-of-go-e296282bcffc">Code your own blockchain in less than 200 lines of Go!</a>，</p>
+<p>本篇转载的译文来自魏佳翻译的: <a href="http://www.10tiao.com/html/175/201801/2653549361/1.html">只用200行Go代码写一个自己的区块链！</a>,高可用架构的公众号</p>
+<p>这篇教程改编自Go版本实现的区块链文章 (译文: 200行代码就能写出区块链)。我使用<code>Nim</code>语言实现了它</p>
+<p>因为我们是一家从事医疗健康领域的科技公司，所以我们采用人类平静时的心跳数据（BPM心率）作为这篇文章中的示例数据。让我们先来统计一下你一分钟内的心跳数，然后记下来，这个数字可能会在接下来的内容中用到。</p>
+<p>几乎每个开发者都听说过区块链但是大部分人还是不清楚它是如何工作的。他们可能只是因为比特币才知道区块链，或许还知道一些智能合约的东东。这篇文章尝试帮助你使用Go编写你自己的简单的区块链。通过本教程，你可以编写和运行一个本地的区块链，并且可以在浏览器中查看它。</p>
+<p>通过本文，你将可以做到：</p>
+<ul>
+<li>创建自己的区块链</li>
+<li>理解 hash 函数是如何保持区块链的完整性</li>
+<li>如何创造并添加新的块</li>
+<li>多个节点如何竞争生成块</li>
+<li>通过浏览器来查看整个链</li>
+<li>所有其他关于区块链的基础知识
+但是，对于比如<code>工作量证明算法（PoW）</code> 以及<code>权益证明算法（PoS）</code>这类的共识算法文章中将不会涉及。同时为了让你更清楚的查看区块链以及块的添加，我们将网络交互的过程简化了，关于 P2P 网络比如“全网广播”这个过程等内容将在下一篇文章中补上。
+</li>
+</ul>
+<h2>让我们开始吧！</h2>
+<h3>设置</h3>
+<p>我们假设你已经具备一点<code>Nim</code>语言的开发经验。在安装和配置<code>Nim</code>开发环境后之后，我们还要获取以下一些依赖：</p>
+<pre><code class="language-bash">nimble install jester
+</code></pre>
+<p>jester是Nim语言的一个Web框架，我们用它来提供Web服务</p>
+<h3>导入依赖</h3>
+<p>我们将所有的依赖包以声明的方式导入进去：</p>
+<pre><code class="language-nim">import times
+import strutils
+import std/sha1
+import jester
+</code></pre>
+<h3>数据模型</h3>
+<p>接着我们来定义一个结构体，它代表组成区块链的每一个块的数据模型：</p>
+<pre><code class="language-nim">type
+  Block = object
+    Index, BPM: int
+    Timestamp, Hash, PrevHash: string
+</code></pre>
+<ul>
+<li>Index 是这个块在整个链中的位置</li>
+<li>Timestamp 显而易见就是块生成时的时间戳</li>
+<li>Hash 是这个块通过 SHA1 算法生成的散列值</li>
+<li>PrevHash 代表前一个块的 SHA1 散列值</li>
+<li>BPM 每分钟心跳数，也就是心率。还记得文章开头说到的吗？</li>
+</ul>
+<p>接着，我们再定义一个结构表示整个链，最简单的表示形式就是一个 Block 的 slice：</p>
+<pre><code class="language-nim">var Blockchain: seq[Block]
+</code></pre>
+<p>我们使用散列算法（SHA1）来确定和维护链中块和块正确的顺序，确保每一个块的 PrevHash 值等于前一个块中的 Hash 值，这样就以正确的块顺序构建出链：
+<img src="https://user-images.githubusercontent.com/730639/63093896-682a1280-bf99-11e9-97b0-0ab62fc2aa03.png" alt="" /></p>
+<h3>散列和生成块</h3>
+<p>我们为什么需要散列？主要是两个原因：</p>
+<ul>
+<li>在节省空间的前提下去唯一标识数据。散列是用整个块的数据计算得出，在我们的例子中，将整个块的数据通过 SHA1 计算成一个定长不可伪造的字符串。</li>
+<li>维持链的完整性。通过存储前一个块的散列值，我们就能够确保每个块在链中的正确顺序。任何对数据的篡改都将改变散列值，同时也就破坏了链。以我们从事的医疗健康领域为例，比如有一个恶意的第三方为了调整“人寿险”的价格，而修改了一个或若干个块中的代表不健康的 BPM 值，那么整个链都变得不可信了。
+我们接着写一个函数，用来计算给定的数据的 SHA1 散列值：
+</li>
+</ul>
+<pre><code class="language-nim">proc calculateHash(b: Block): string =
+  var
+    record = intToStr(b.Index) &amp; b.Timestamp &amp; intToStr(b.BPM) &amp; b.PrevHash
+  return $secureHash(record)
+</code></pre>
+<p>这个 <code>calculateHash</code> 函数接受一个块，通过块中的 Index，Timestamp，BPM，以及 PrevHash 值来计算出 SHA1 散列值。接下来我们就能便携一个生成块的函数：</p>
+<pre><code class="language-nim">proc generateBlock(oldBlock: Block, BPM: int): Block =
+    var
+      newBlock: Block
+    newBlock.Index = oldBlock.Index + 1
+    newBlock.Timestamp = $getTime().toUnix()
+    newBlock.BPM = BPM
+    newBlock.PrevHash = oldBlock.Hash
+    newBlock.Hash = calculateHash(newBlock)
+    return newBlock
+</code></pre>
+<p>其中，Index 是从给定的前一块的 Index 递增得出，时间戳是直接通过 time.Now() 函数来获得的，Hash 值通过前面的 calculateHash 函数计算得出，PrevHash 则是给定的前一个块的 Hash 值。</p>
+<h3>校验块</h3>
+<p>搞定了块的生成，接下来我们需要有函数帮我们判断一个块是否有被篡改。检查 Index 来看这个块是否正确得递增，检查 PrevHash 与前一个块的 Hash 是否一致，再来通过 calculateHash 检查当前块的 Hash 值是否正确。通过这几步我们就能写出一个校验函数：</p>
+<pre><code class="language-nim">proc isBlockValid(newBlock, oldBlock: Block): bool =
+  if oldBlock.Index+1 != newBlock.Index:
+    return false
+  if oldBlock.Hash != newBlock.PrevHash:
+    return false
+  if calculateHash(newBlock) != newBlock.Hash:
+    return false
+  return true
+</code></pre>
+<p>除了校验块以外，我们还会遇到一个问题：两个节点都生成块并添加到各自的链上，那我们应该以谁为准？这里的细节我们留到下一篇文章，这里先让我们记住一个原则：始终选择最长的链。</p>
+<p><img src="https://user-images.githubusercontent.com/730639/63093900-6ceec680-bf99-11e9-8a78-bfc4095e4793.png" alt="" /></p>
+<p>通常来说，更长的链表示它的数据（状态）是更新的，所以我们需要一个函数</p>
+<p>能帮我们将本地的过期的链切换成最新的链：</p>
+<pre><code class="language-nim">proc replaceChain(newBlocks: seq[Block]) =
+  if len(newBlocks) &gt; len(Blockchain):
+    Blockchain = newBlocks
+</code></pre>
+<p>到这一步，我们基本就把所有重要的函数完成了。接下来，我们需要一个方便直观的方式来查看我们的链，包括数据及状态。通过浏览器查看 web 页面可能是最合适的方式！</p>
+<h3>Web 服务</h3>
+<p>我猜你一定对传统的 web 服务及开发非常熟悉，所以这部分你肯定一看就会。
+借助 <code>jester</code> 包，我们先来初始化我们的 web 服务：</p>
+<pre><code>settings:
+  port = Port(8080)
+  bindAddr = &quot;127.0.0.1&quot;
+</code></pre>
+<p>}
+接下来我们再来定义不同 endpoint 以及对应的 handler。例如，对“/”的 GET 请求我们可以查看整个链，“/”的 POST 请求可以创建块。</p>
+<pre><code class="language-nim">routes:
+  get &quot;/&quot;:
+    resp $Blockchain
+  post &quot;/&quot;:
+    var
+      bpm = @&quot;BPM&quot;
+      newBlock = generateBlock(Blockchain[len(Blockchain)-1], bpm.parseInt)
+    if isBlockValid(newBlock, Blockchain[len(Blockchain)-1]):
+      var newBlocks = deepCopy(Blockchain)
+      newBlocks.add newBlock
+      replaceChain(newBlocks)
+    resp Http201, $newBlock
+</code></pre>
+<p>为了简化，我们直接以 类JSON 格式返回整个链，你可以在浏览器中访问 localhost:8080 或者 127.0.0.1:8080 来查看</p>
+<p>我们的 POST 请求体中可以使用上面定义的<code>BPM</code>，比如：</p>
+<pre><code class="language-bash">curl 127.1:8080/ -d BPM=51 -v
+</code></pre>
+<p>还记得前面我们写的 <code>generateBlock</code> 这个函数吗？它接受一个“前一个块”参数，和一个 BPM 值。POST handler 接受请求后就能获得请求体中的 BPM 值，接着借助生成块的函数以及校验块的函数就能生成一个新的块了！</p>
+<h3>快要大功告成了</h3>
+<p>接下来，我们把这些关于区块链的函数，web 服务的函数“组装”起来：</p>
+<pre><code class="language-nim">var
+  genesisBlock: Block
+genesisBlock.Index = 0
+genesisBlock.Timestamp = $getTime().toUnix()
+genesisBlock.BPM = 0
+genesisBlock.PrevHash = &quot;&quot;
+genesisBlock.Hash = &quot;&quot;
+Blockchain.add genesisBlock
+</code></pre>
+<p>这里的 <code>genesisBlock</code> （创世块）是 <code>main</code> 函数中最重要的部分，通过它来初始化区块链，毕竟第一个块的 <code>PrevHash</code> 是空的。</p>
+<h3>哦耶！完成了</h3>
+<p>你们可以从这里获得完整的代码：<a href="https://github.com/muxueqz/blockchain-tutorial.nim">Github repo</a>。</p>
+<p>让我们来启动它：</p>
+<pre><code class="language-nim">nim c -r main.nim
+</code></pre>
+<p>在终端中，我们可以看到 web 服务器启动的日志信息，并且打印出了创世块的信息：</p>
+<p>接着我们打开浏览器，访问 <code>localhost:8080</code> 这个地址，我们可以看到页面中展示了当前整个区块链的信息（当然，目前只有一个创世块）：</p>
+<pre><code class="language-bash">$ curl 127.1:5003/
+@[(Index: 0, BPM: 0, Timestamp: &quot;1565863415&quot;, Hash: &quot;&quot;, PrevHash: &quot;&quot;)]
+</code></pre>
+<p>接着，我们再通过 <code>curl</code> 来发送一些 POST 请求：</p>
+<pre><code class="language-bash">curl 127.1:8080/ -d BPM=55 -v
+</code></pre>
+<p>刷新刚才的页面，现在的链中多了一些块，正是我们刚才生成的，同时你们可以看到，块的顺序和散列值都正确。</p>
+<pre><code class="language-bash">$ curl 127.1:5003/
+@[(Index: 0, BPM: 0, Timestamp: &quot;1565865760&quot;, Hash: &quot;&quot;, PrevHash: &quot;&quot;), (Index: 1, BPM: 51, Timestamp: &quot;1565865762&quot;, Hash: &quot;61FA37C1651401E2BDCD04A5299DD4C228CD6CAA&quot;, PrevHash: &quot;&quot;), (Index: 2, BPM: 51, Timestamp: &quot;1565865766&quot;, Hash: &quot;DB0AA1B82F8A2659A5EB12AE05249BA573D7D846&quot;, PrevHash: &quot;61FA37C1651401E2BDCD04A5299DD4C228CD6CAA&quot;)]
+</code></pre>
+<h2>下一步</h2>
+<p>刚刚我们完成了一个自己的区块链，虽然很简单（陋），但它具备块生成、散列计算、块校验等基本能力。接下来你就可以继续深入的学习区块链的其他重要知识，比如工作量证明、权益证明这样的共识算法，或者是智能合约、Dapp、侧链等等。</p>
+<p>目前这个实现中不包括任何 P2P 网络的内容，我们会在下一篇文章中补充这部分内容，当然，我们鼓励你在这个基础上自己实践一遍！</p>
+
+  </content>
+</article>
+
+<script src="https://utteranc.es/client.js"
+        repo="muxueqz/muxueqz-blog"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    <section id=nav>
+      <h1><a href="/"></a></h1>
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </section>
+
+
+</body>
+  <!-- Google Analytics (that's right, I'm tracking you) -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+        var pageTracker = _gat._getTracker("UA-33825897-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  <script src="/static/prism.js"></script>
+</html>
+
+

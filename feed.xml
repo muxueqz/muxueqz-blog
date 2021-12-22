@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>QingZhuo Blog</title>
+  <description>A Geek Blog</description>
+  <link>https://muxueqz.top</link>
+  <atom:link href="https://muxueqz.top/feed.xml"
+    rel="self" type="application/rss+xml" />
+
+      <item>
+    <title>用Nim语言开发CKB合约</title>
+    <link>https://muxueqz.top/nim-on-ckb.html</link>
+    <guid>https://muxueqz.top/nim-on-ckb.html</guid>
+    <pubDate>Tue, 09 Jun 2020 14:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>迁移密码管理器始末，从KeePass到Pass</title>
+    <link>https://muxueqz.top/keepass2pass.html</link>
+    <guid>https://muxueqz.top/keepass2pass.html</guid>
+    <pubDate>Fri, 13 Sep 2019 03:34:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>轻量级书签管理器Skybook 1.0发布啦！</title>
+    <link>https://muxueqz.top/skybook_1.0.html</link>
+    <guid>https://muxueqz.top/skybook_1.0.html</guid>
+    <pubDate>Fri, 30 Aug 2019 10:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>只用65行Nim代码写一个自己的区块链</title>
+    <link>https://muxueqz.top/code-your-own-blockchain-in-less-than-65-lines-of-nim.html</link>
+    <guid>https://muxueqz.top/code-your-own-blockchain-in-less-than-65-lines-of-nim.html</guid>
+    <pubDate>Thu, 15 Aug 2019 10:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>一个用Nim语言实现的轻量级书签管理器</title>
+    <link>https://muxueqz.top/skybook.html</link>
+    <guid>https://muxueqz.top/skybook.html</guid>
+    <pubDate>Tue, 13 Aug 2019 10:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>静态博客持续集成大法</title>
+    <link>https://muxueqz.top/my-blog-ci.html</link>
+    <guid>https://muxueqz.top/my-blog-ci.html</guid>
+    <pubDate>Fri, 09 Aug 2019 14:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>新兴监控平台InfluxDB（TICK）初体验</title>
+    <link>https://muxueqz.top/tick.html</link>
+    <guid>https://muxueqz.top/tick.html</guid>
+    <pubDate>Thu, 08 Aug 2019 10:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>只需五步，自己动手写一个静态博客</title>
+    <link>https://muxueqz.top/a-small-static-site-generator.html</link>
+    <guid>https://muxueqz.top/a-small-static-site-generator.html</guid>
+    <pubDate>Tue, 06 Aug 2019 05:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>在Linux上跨平台编译OpenWRT路由器上的Nim程序</title>
+    <link>https://muxueqz.top/nim_on_openwrt.html</link>
+    <guid>https://muxueqz.top/nim_on_openwrt.html</guid>
+    <pubDate>Fri, 05 Apr 2019 05:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>Heka</title>
+    <link>https://muxueqz.top/heka.html</link>
+    <guid>https://muxueqz.top/heka.html</guid>
+    <pubDate>Sat, 30 May 2015 05:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>用auditd找到在Linux中乱建文件的家伙！</title>
+    <link>https://muxueqz.top/auditd.html</link>
+    <guid>https://muxueqz.top/auditd.html</guid>
+    <pubDate>Tue, 24 Mar 2015 03:34:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>明源的2013</title>
+    <link>https://muxueqz.top/2014_start.html</link>
+    <guid>https://muxueqz.top/2014_start.html</guid>
+    <pubDate>Sun, 12 Jan 2014 05:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
+    <title>分布式任务队列Celery快速上手</title>
+    <link>https://muxueqz.top/celery_quickstart.html</link>
+    <guid>https://muxueqz.top/celery_quickstart.html</guid>
+    <pubDate>Sat, 17 Aug 2013 05:20:00 GMT</pubDate>
+  </item>
+    
+
+</channel>
+</rss>

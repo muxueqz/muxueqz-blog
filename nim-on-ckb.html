@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="muxueqz">
+  
+<title>用Nim语言开发CKB合约 - QingZhuo Blog</title>
+<meta property="og:title" content="用Nim语言开发CKB合约 - QingZhuo Blog">
+<meta property="og:tags" content="nim">
+
+<meta property="og:description" content="">
+
+<meta property="og:image" content="https://muxueqz.top/static/me.png">
+
+<meta name="twitter:image:alt" content="Avatar for muxueqz">
+
+<meta property="og:url" content="https://muxueqz.top/nim-on-ckb.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@muxueqz">
+
+  <!-- Syntax highlighting css -->
+  <link href="/static/prism.css" rel="stylesheet" />
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+    <link rel="canonical" href="/">
+
+    <style>
+  * {
+    border:0;
+    font:inherit;
+    font-size:100%;
+    vertical-align:baseline;
+    margin:0;
+    padding:0;
+    color: black;
+  }
+
+  body {
+    font-family:'Open Sans', 'Myriad Pro', Myriad, sans-serif;
+    font-size:17px;
+    line-height:160%;
+    color:#1d1313;
+    max-width:700px;
+    margin:auto;
+  }
+
+  p {
+    margin: 20px 0;
+  }
+
+  a img {
+    border:none;
+  }
+
+  img {
+    margin: 10px auto 10px auto;
+    max-width: 100%;
+    display: block;
+  }
+
+  pre, code {
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    background-color: #f7f7f7;
+  }
+
+  code {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  pre {
+    margin-top: 0;
+    margin-bottom: 16px;
+    word-wrap: normal;
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+  }
+
+  pre>code {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    word-break: normal;
+    white-space: pre;
+    background: transparent;
+    border: 0;
+  }
+
+  pre code {
+    display: inline;
+    max-width: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
+    background-color: transparent;
+    border: 0;
+  }
+
+  pre code::before,
+  pre code::after {
+    content: normal;
+  }
+
+  em,q,em,dfn {
+    font-style:italic;
+  }
+
+  .sans,html .gist .gist-file .gist-meta {
+    font-family:"Open Sans","Myriad Pro",Myriad,sans-serif;
+  }
+
+  .mono,pre,code,tt,p code,li code {
+    font-family:Menlo,Monaco,"Andale Mono","lucida console","Courier New",monospace;
+  }
+
+  .heading,.serif,h1,h2,h3 {
+    font-family:"Old Standard TT",serif;
+  }
+
+  strong {
+    font-weight:600;
+  }
+
+  q:before {
+    content:"\201C";
+  }
+
+  q:after {
+    content:"\201D";
+  }
+
+  del,s {
+    text-decoration:line-through;
+  }
+
+  blockquote {
+    font-family:"Old Standard TT",serif;
+    text-align:center;
+    padding:50px;
+  }
+
+  blockquote p {
+    display:inline-block;
+    font-style:italic;
+  }
+
+  blockquote:before,blockquote:after {
+    font-family:"Old Standard TT",serif;
+    content:'\201C';
+    font-size:35px;
+    color:#403c3b;
+  }
+
+  blockquote:after {
+    content:'\201D';
+  }
+
+  hr {
+    width:40%;
+    height: 1px;
+    background:#403c3b;
+    margin: 25px auto;
+  }
+
+  h1 {
+    font-size:35px;
+    line-height:100%;
+  }
+
+  h2 {
+    font-size:28px;
+  }
+
+  h3 {
+    font-size:22px;
+    margin-top:18px;
+  }
+
+  h1 a,h2 a,h3 a {
+    text-decoration:none;
+  }
+
+  h1,h2 {
+    margin-top:28px;
+  }
+
+  #sub-header, time {
+    color:#403c3b;
+    font-size:13px;
+  }
+
+  #sub-header {
+    margin: 0 4px;
+  }
+
+  #nav h1 a {
+    font-size:35px;
+    color:#1d1313;
+    line-height:120%;
+  }
+
+  .posts_listing a,#nav a {
+    text-decoration: none;
+  }
+
+  li {
+    margin-left: 20px;
+  }
+
+  #nav ul li:before, .posts_listing li:before {
+    content:'';
+    margin-right:0;
+  }
+
+  #content {
+    text-align:left;
+    width:100%;
+    font-size:15px;
+    padding:60px 0 80px;
+  }
+
+  #content h1,#content h2 {
+    margin-bottom:5px;
+  }
+
+  #content h2 {
+    font-size:25px;
+  }
+
+  #content .entry-content {
+    margin-top:15px;
+  }
+
+  #content time {
+    margin-left:3px;
+  }
+
+  #content h1 {
+    font-size:30px;
+  }
+
+  .highlight {
+    margin: 10px 0;
+  }
+
+  .posts_listing {
+    margin:0 0 50px;
+  }
+
+  .posts_listing li {
+    margin:0 0 25px 15px;
+  }
+
+  .posts_listing li a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  .posts-list a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  #nav {
+    text-align:center;
+    position:static;
+    margin-top:60px;
+  }
+
+  #nav ul {
+    display: table;
+    margin: 8px auto 0 auto;
+  }
+
+  #nav li {
+    list-style-type:none;
+    display:table-cell;
+    font-size:15px;
+    padding: 0 20px;
+  }
+
+  #links {
+    margin: 50px 0 0 0;
+  }
+
+  #links :nth-child(2) {
+    float:right;
+  }
+
+  #not-found {
+    text-align: center;
+  }
+
+  #not-found a {
+    font-family:"Old Standard TT",serif;
+    font-size: 200px;
+    text-decoration: none;
+    display: inline-block;
+    padding-top: 225px;
+  }
+
+  @media (max-width: 750px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:28px;
+    }
+
+    #nav li {
+      font-size:13px;
+      padding: 0 15px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:50px;
+      font-size:14px;
+    }
+
+    #content h1 {
+      font-size:25px;
+    }
+
+    #content h2 {
+      font-size:22px;
+    }
+
+    .posts_listing li div {
+      font-size:12px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:22px;
+    }
+
+    #nav li {
+      font-size:12px;
+      padding: 0 10px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:20px;
+      font-size:12px;
+    }
+
+    #content h1 {
+      font-size:20px;
+    }
+
+    #content h2 {
+      font-size:18px;
+    }
+
+    .posts_listing li div{
+      font-size:12px;
+    }
+  }
+</style>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+    
+  </head>
+
+  <body>
+    
+<article>
+  <h1>用Nim语言开发CKB合约</h1>
+  <aside>
+    <div id="sub-header">
+      2020-06-09 22:20
+            <a class="label" href="/tags/nim.html">
+        nim
+        </a>
+        
+    · <a href="/">view all posts</a>
+    </div>
+  </aside>
+  <content>
+    <h2>前言</h2>
+<p>众所周知，Nervos 底层公链 CKB 的虚拟机（<a href="https://github.com/nervosnetwork/ckb-vm">CKB-VM</a>）是基于 RISC-V 指令集打造的区块链虚拟机，
+其中一个特性就是&quot;任何可以编译成 RISC-V 指令集的语言均可以直接用来为 CKB 开发智能合约&quot;，</p>
+<p>理论上只要支持CKB VM里的syscall就可以作为合约的开发语言，又看到 https://hookrace.net/blog/nim-binary-size/ 里提到如何精简nim编译出来的二进制文件与systemcall，
+因此，我就在想，是不是可以用nim编译出可以在CKB VM上运行的程序呢？
+想到就去做。</p>
+<h2>准备工作</h2>
+<pre><code class="language-bash"># Debug工具
+docker pull muxueqz/ckb-standalone-debugger-plus:latest
+# Nim工具链
+docker pull muxueqz/ckb-nim-builder:latest
+# nim ckb syscall
+git clone https://github.com/muxueqz/ckb-nim-builder.git --recurse-submodules
+</code></pre>
+<h2>编写测试合约</h2>
+<p>用Nim编写合约的代码如下：</p>
+<pre><code class="language-nim">import ckb_syscall
+
+
+proc main: clong {.exportc: &quot;_start&quot;.} =
+   ckb_debug(&quot;hello world&quot;)
+   ckb_exit 0
+</code></pre>
+<p>这份代码在<code>ckb-nim-builder</code>已经有了：<code>example.nim</code></p>
+<h2>接下来我们把它编译成链上可运行的二进制：</h2>
+<pre><code class="language-bash">cd ckb-nim-builder
+docker run -w /app -v $PWD/:/app -it --rm muxueqz/ckb-nim-builder bash -x /app/build.sh example.nim
+</code></pre>
+<h2>用学姐的ckb-standalone-debugger测试编译出来的二进制能不能运行</h2>
+<pre><code class="language-bash">docker run -w /data/ -v $PWD:/data  -it --rm muxueqz/ckb-standalone-debugger-plus:latest /data/example 0x10000000
+</code></pre>
+<p>如果得到的结果如下，那就说明可以正常运行了</p>
+<pre><code>Executing: /opt/debugger/ckb-debugger --tx-file tx.json --script-group-type type -i 0 -e input
+DEBUG:&lt;unknown&gt;: script group: Byte32(0xe858b26d459d418fa5f78a8dd6c639cb7714942816caacb9749830e5203f31ac) DEBUG OUTPUT: hello world
+Run result: Ok(0)
+Total cycles consumed: 1091
+Transfer cycles: 56, running cycles: 1035
+</code></pre>
+<h2>参考</h2>
+<ul>
+<li>https://github.com/nervosnetwork/ckb-vm/blob/416bb211abea1ef79ffa5ce3b14706044e65cd2a/src/machine/mod.rs</li>
+<li>https://nim-lang.org/docs/nimc.html#nim-for-embedded-systems</li>
+<li>https://github.com/jjyr/ckb-std/blob/master/test/contract/src/main.rs</li>
+<li>https://zhuanlan.zhihu.com/p/95982790</li>
+<li>https://medium.com/nervosnetwork/intro-to-ckb-script-programming-2-script-basics-85a593720d8f</li>
+<li>https://livebook.manning.com/book/nim-in-action/chapter-8/35</li>
+<li>https://xuejie.space/2020_03_03_introduction_to_ckb_script_programming_performant_wasm/</li>
+</ul>
+
+  </content>
+</article>
+
+<script src="https://utteranc.es/client.js"
+        repo="muxueqz/muxueqz-blog"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    <section id=nav>
+      <h1><a href="/"></a></h1>
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </section>
+
+
+</body>
+  <!-- Google Analytics (that's right, I'm tracking you) -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+        var pageTracker = _gat._getTracker("UA-33825897-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  <script src="/static/prism.js"></script>
+</html>
+
+

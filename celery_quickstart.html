@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="muxueqz">
+  
+<title>分布式任务队列Celery快速上手 - QingZhuo Blog</title>
+<meta property="og:title" content="分布式任务队列Celery快速上手 - QingZhuo Blog">
+<meta property="og:tags" content="python,redis,celery,Python,server">
+
+<meta property="og:description" content="">
+
+<meta property="og:image" content="https://muxueqz.top/static/me.png">
+
+<meta name="twitter:image:alt" content="Avatar for muxueqz">
+
+<meta property="og:url" content="https://muxueqz.top/celery_quickstart.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@muxueqz">
+
+  <!-- Syntax highlighting css -->
+  <link href="/static/prism.css" rel="stylesheet" />
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+    <link rel="canonical" href="/">
+
+    <style>
+  * {
+    border:0;
+    font:inherit;
+    font-size:100%;
+    vertical-align:baseline;
+    margin:0;
+    padding:0;
+    color: black;
+  }
+
+  body {
+    font-family:'Open Sans', 'Myriad Pro', Myriad, sans-serif;
+    font-size:17px;
+    line-height:160%;
+    color:#1d1313;
+    max-width:700px;
+    margin:auto;
+  }
+
+  p {
+    margin: 20px 0;
+  }
+
+  a img {
+    border:none;
+  }
+
+  img {
+    margin: 10px auto 10px auto;
+    max-width: 100%;
+    display: block;
+  }
+
+  pre, code {
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    background-color: #f7f7f7;
+  }
+
+  code {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  pre {
+    margin-top: 0;
+    margin-bottom: 16px;
+    word-wrap: normal;
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+  }
+
+  pre>code {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    word-break: normal;
+    white-space: pre;
+    background: transparent;
+    border: 0;
+  }
+
+  pre code {
+    display: inline;
+    max-width: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
+    background-color: transparent;
+    border: 0;
+  }
+
+  pre code::before,
+  pre code::after {
+    content: normal;
+  }
+
+  em,q,em,dfn {
+    font-style:italic;
+  }
+
+  .sans,html .gist .gist-file .gist-meta {
+    font-family:"Open Sans","Myriad Pro",Myriad,sans-serif;
+  }
+
+  .mono,pre,code,tt,p code,li code {
+    font-family:Menlo,Monaco,"Andale Mono","lucida console","Courier New",monospace;
+  }
+
+  .heading,.serif,h1,h2,h3 {
+    font-family:"Old Standard TT",serif;
+  }
+
+  strong {
+    font-weight:600;
+  }
+
+  q:before {
+    content:"\201C";
+  }
+
+  q:after {
+    content:"\201D";
+  }
+
+  del,s {
+    text-decoration:line-through;
+  }
+
+  blockquote {
+    font-family:"Old Standard TT",serif;
+    text-align:center;
+    padding:50px;
+  }
+
+  blockquote p {
+    display:inline-block;
+    font-style:italic;
+  }
+
+  blockquote:before,blockquote:after {
+    font-family:"Old Standard TT",serif;
+    content:'\201C';
+    font-size:35px;
+    color:#403c3b;
+  }
+
+  blockquote:after {
+    content:'\201D';
+  }
+
+  hr {
+    width:40%;
+    height: 1px;
+    background:#403c3b;
+    margin: 25px auto;
+  }
+
+  h1 {
+    font-size:35px;
+    line-height:100%;
+  }
+
+  h2 {
+    font-size:28px;
+  }
+
+  h3 {
+    font-size:22px;
+    margin-top:18px;
+  }
+
+  h1 a,h2 a,h3 a {
+    text-decoration:none;
+  }
+
+  h1,h2 {
+    margin-top:28px;
+  }
+
+  #sub-header, time {
+    color:#403c3b;
+    font-size:13px;
+  }
+
+  #sub-header {
+    margin: 0 4px;
+  }
+
+  #nav h1 a {
+    font-size:35px;
+    color:#1d1313;
+    line-height:120%;
+  }
+
+  .posts_listing a,#nav a {
+    text-decoration: none;
+  }
+
+  li {
+    margin-left: 20px;
+  }
+
+  #nav ul li:before, .posts_listing li:before {
+    content:'';
+    margin-right:0;
+  }
+
+  #content {
+    text-align:left;
+    width:100%;
+    font-size:15px;
+    padding:60px 0 80px;
+  }
+
+  #content h1,#content h2 {
+    margin-bottom:5px;
+  }
+
+  #content h2 {
+    font-size:25px;
+  }
+
+  #content .entry-content {
+    margin-top:15px;
+  }
+
+  #content time {
+    margin-left:3px;
+  }
+
+  #content h1 {
+    font-size:30px;
+  }
+
+  .highlight {
+    margin: 10px 0;
+  }
+
+  .posts_listing {
+    margin:0 0 50px;
+  }
+
+  .posts_listing li {
+    margin:0 0 25px 15px;
+  }
+
+  .posts_listing li a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  .posts-list a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  #nav {
+    text-align:center;
+    position:static;
+    margin-top:60px;
+  }
+
+  #nav ul {
+    display: table;
+    margin: 8px auto 0 auto;
+  }
+
+  #nav li {
+    list-style-type:none;
+    display:table-cell;
+    font-size:15px;
+    padding: 0 20px;
+  }
+
+  #links {
+    margin: 50px 0 0 0;
+  }
+
+  #links :nth-child(2) {
+    float:right;
+  }
+
+  #not-found {
+    text-align: center;
+  }
+
+  #not-found a {
+    font-family:"Old Standard TT",serif;
+    font-size: 200px;
+    text-decoration: none;
+    display: inline-block;
+    padding-top: 225px;
+  }
+
+  @media (max-width: 750px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:28px;
+    }
+
+    #nav li {
+      font-size:13px;
+      padding: 0 15px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:50px;
+      font-size:14px;
+    }
+
+    #content h1 {
+      font-size:25px;
+    }
+
+    #content h2 {
+      font-size:22px;
+    }
+
+    .posts_listing li div {
+      font-size:12px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:22px;
+    }
+
+    #nav li {
+      font-size:12px;
+      padding: 0 10px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:20px;
+      font-size:12px;
+    }
+
+    #content h1 {
+      font-size:20px;
+    }
+
+    #content h2 {
+      font-size:18px;
+    }
+
+    .posts_listing li div{
+      font-size:12px;
+    }
+  }
+</style>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+    
+  </head>
+
+  <body>
+    
+<article>
+  <h1>分布式任务队列Celery快速上手</h1>
+  <aside>
+    <div id="sub-header">
+      2013-08-17 13:20
+            <a class="label" href="/tags/python.html">
+        python
+        </a>
+                <a class="label" href="/tags/redis.html">
+        redis
+        </a>
+                <a class="label" href="/tags/celery.html">
+        celery
+        </a>
+                <a class="label" href="/tags/Python.html">
+        Python
+        </a>
+                <a class="label" href="/tags/server.html">
+        server
+        </a>
+        
+    · <a href="/">view all posts</a>
+    </div>
+  </aside>
+  <content>
+    <h2>Celery介绍</h2>
+<p>celery(芹菜)是一个异步任务队列/基于分布式消息传递的作业队列。</p>
+<ul>
+<li>它侧重于实时操作，但对调度支持也很好。</li>
+<li>celery用于生产系统每天处理数以百万计的任务。</li>
+<li>celery是用Python编写的，但该协议可以在任何语言实现。它也可以用其他语言通过webhooks实现。</li>
+</ul>
+<ol>
+<li>目前已知有php/ruby/nodejs的实现</li>
+</ol>
+<h3>为什么用Celery?</h3>
+<ul>
+<li>异步</li>
+<li>耗时久的事儿可以扔给 Worker 处理，处理完可以触发子任务提醒</li>
+<li>天然的并发能力(多进程/协程)!</li>
+<li>非常方便添加 Worker 来增强处理能力</li>
+<li>Celery提供了Web方式的监控/报警，这样，我们就可以监控每个任务的情况了</li>
+<li>出现错误可以自动处理/重试</li>
+</ul>
+<h3>角色介绍</h3>
+<p><strong>Brokers</strong>: 提供队列服务，Celery支持的Brokers有:</p>
+<ul>
+<li>RabbitMQ(<strong>推荐</strong>)</li>
+<li>Redis</li>
+<li>MongoDB</li>
+<li>Beanstalk</li>
+<li>CouchDB</li>
+<li>SQLAlchemy(MySQL/PostgreSQL/Sqlite/Oracle)</li>
+<li>Amazon SQS等</li>
+</ul>
+<p><strong>Worker</strong>: 真正干活的，实际运行任务的节点。</p>
+<h2>开始 Celery 的第一步</h2>
+<h3>选择你的 Broker</h3>
+<p>在你正式开始使用 Celery 之前，你需要选择、安装并运行一个 broker。</p>
+<p>Broker 是一种负责接收、发送任务消息（task messages）的服务</p>
+<p>你可以从以下几种 broker 中选择一个：</p>
+<ul>
+<li>RabbitMQ : [[http://www.rabbitmq.com/]]</li>
+</ul>
+<p>功能完整、安全、饱经实践检验的 broker。如果对你而言，不丢失消息非常重要，RabbitMQ 将是你最好的选择。</p>
+<p>请查看 [[/技术分享/Celery/broker-installation]] 以便获得更多关于 RabbitMQ 安装和配置相关的信息。</p>
+<ul>
+<li>Redis : [[http://redis.io/]]</li>
+</ul>
+<p>也是一个功能完整的 broker，但电源故障或异常将导致数据丢失。</p>
+<p>请查看 [[/技术分享/Celery/otherqueues-redis]] 以便配置相关的信息。</p>
+<ul>
+<li>数据库</li>
+</ul>
+<p>不推荐使用数据库作为消息队列，但在非常小的应用中可以使用。Celery 可以使用 SQLAlchemy 和 Django ORMS。请查看 [[/技术分享/Celery/otherqueues-sqlalchemy]] 或 [[/技术分享/Celery/otherqueues-django]]。</p>
+<ul>
+<li>更多其他选择。</li>
+</ul>
+<p>除了上面列出的以外，还有其他可以选择的传输实现，例如 CouchDB, Beanstalk, MongoDB, and SQS。请查阅 Kombu 的文档以便获得更多信息。</p>
+<h3>安装Celery</h3>
+<pre><code class="language-bash">#安装celery
+$ pip install celery
+#安装时区的模块，不然会有时间慢8小时的问题
+$ pip install pytz
+</code></pre>
+<h3>创建一个简单“任务”（Task）</h3>
+<p>在这个教程里，我们将创建一个简单的“任务”（Task） —— 把两个数加起来。通常，我们在 Python 的模块中定义“任务”。</p>
+<p>按照惯例，我们将调用模块 <code>file</code>:<code>tasks.py</code>，看起来会像这个样子：</p>
+<p><code>file</code>:<code>tasks.py</code></p>
+<pre><code class="language-python">from celery.task import task
+@task
+def add(x, y):
+    return x + y
+</code></pre>
+<p>此时， <code>@task</code> 装饰器实际上创建了一个继承自 :class:<code>~celery.task.base.Task</code> 的“类”（class）。除非需要修改“任务类”的缺省行为，否则我们推荐只通过装饰器定义“任务”（这是我们推崇的最佳实践）。</p>
+<p>seealso:
+关于创建任务和任务类的完整文档可以在 <code>../userguide/tasks</code> 中找到。</p>
+<h3>配置</h3>
+<p>Celery 使用一个配置模块来进行配置。这个模块缺省北命名为 :file:<code>celeryconfig.py</code>。</p>
+<p>为了能被 import，这个配置模块要么存在于当前目录，要么包含在 Python 路径中。</p>
+<p>同时，你可以通过使用环境变量 <code>CELERY_CONFIG_MODULE</code> 来随意修改这个配置文件的名字。</p>
+<p>现在来让我们创建配置文件 <code>celeryconfig.py</code>.</p>
+<ol>
+<li>配置如何连接 broker（例子中我们使用 RabbitMQ）:
+BROKER_URL = &quot;amqp:''guest:guest@localhost:5672''&quot;</li>
+<li>定义用于存储元数据（metadata）和返回值（return values）的后端:
+CELERY_RESULT_BACKEND = &quot;amqp&quot;
+</li>
+</ol>
+<p>AMQP 后端缺省是非持久化的，你只能取一次结果（一条消息）。</p>
+<p>可以阅读 :ref:<code>conf-result-backend</code> 了解可以使用的后端清单和相关参数。</p>
+<ol start="3">
+<li>最后，我们列出 worker 需要 import 的模块，包括你的任务。</li>
+</ol>
+<p>我们只有一个刚开始添加的任务模块 :file:<code>tasks.py</code>::</p>
+<pre><code>    CELERY_IMPORTS = (&quot;tasks&quot;, )
+</code></pre>
+<p>这就行了。</p>
+<p>你还有更多的选项可以使用，例如：你期望使用多少个进程来并行处理（:setting:<code>CELERY_CONCURRENCY</code> 设置），或者使用持久化的结果保存后端。可以阅读 :ref:<code>configuration</code> 查看更多的选项。</p>
+<p>note:</p>
+<p>你可以也使用</p>
+<pre><code class="language-bash">$ celery -A tasks worker --loglevel=info
+</code></pre>
+<h3>运行 worker 服务器</h3>
+<p>为了方便测试，我们将在前台运行 worker 服务器，这样我们就能在终端上看到 celery 上发生的事情:</p>
+<pre><code class="language-bash">$ celeryd --loglevel=INFO
+</code></pre>
+<p>在生产环境中，也许你希望将 worker 在后台以守护进程的方式运行。如果你希望这么做，你可以利用平台或者类似于 <code>supervisord</code> (查阅 :ref:<code>daemonizing</code> 以获得更多信息） 的工具来实现。</p>
+<p>可以通过下列命令行获得完整的命令参数清单:</p>
+<pre><code class="language-bash">$  celeryd --help
+</code></pre>
+<p>supervisord: <a href="http://supervisord.org">http://supervisord.org</a></p>
+<h3>执行任务（task）</h3>
+<p>我们通过调用 class 类的 <code>~celery.task.base.Task.delay</code> 方法执行任务。</p>
+<p><code>~celery.task.base.Task.apply_async</code> 方法一个非常方便的方法，通过这个方法我们可以充分控制控制任务执行的参数（参见 :ref:<code>guide-executing</code>）。</p>
+<pre><code class="language-python">&gt;&gt;&gt; from tasks import add
+&gt;&gt;&gt; add.delay(4, 4)
+&lt;AsyncResult: 889143a6-39a2-4e52-837b-d80d33efb22d&gt;
+</code></pre>
+<p>此时，任务已经被发送到了消息 broker。直到有 worker 服务器取走并执行了这个任务，否则 Broker 将一直保存这个消息。</p>
+<p>现在我们可以使用任务返回类 <code>~celery.result.AsyncResult</code> 来查看 worker 的日志，看看到底发生了什么。如果你配置了一个结果存储类 <code>~celery.result.AsyncResult</code> 来保存任务状态，任务执行完毕可获得返回值；任务执行失败则可获得异常/回调等信息。</p>
+<h3>Shell里执行任务</h3>
+<pre><code class="language-bash">#add 为任务名
+$ celery call add
+</code></pre>
+<h3>保留结果</h3>
+<p>如果你想跟踪任务状态，Celery 就需要把这些状态信息发送并存储到某处。你可以使用多种后端来达到这个目的: SQLAlchemy/Django ORM, Memcached, Redis,AMQP, MongoDB, Tokyo Tyrant 和 Redis —— 甚至你可以定义你自己的。</p>
+<p>在这里，我们将使用 <code>amqp</code> 作为保存结果的后端来存储状态消息。可以通过 {{{CELERY_RESULT_BACKEND}}} 来修改后端选项，你可以用于保存结果后端的选项有:</p>
+<pre><code class="language-python">CELERY_RESULT_BACKEND = &quot;amqp&quot;
+#: 我们希望结果最多保存 5 分钟。 
+#: 注意，这个特性需要 2.1.1 以上版本 RabbitMQ 才能支持。
+#: 如果你使用的是早期版本的 RabbitMQ，请注释下面这行。
+CELERY_TASK_RESULT_EXPIRES = 300
+</code></pre>
+<p>请通过阅读 Celery/任务结果后端 获得更多相关配置的信息。</p>
+<p>现在，我们配置好了保存结果的后端，让我们重新来执行任务。我们再次使用类 <code>~celery.result.AsyncResult</code>:</p>
+<pre><code class="language-python">&gt;&gt;&gt; result = add.delay(4, 4)
+</code></pre>
+<p>这里是一些你可以如何处理结果的方法:</p>
+<pre><code class="language-python">&gt;&gt;&gt; result.ready() # 任务是否已经执行，如果已经执行完毕，返回值为 True。
+False
+&gt;&gt;&gt; result.result # 任务还没完成，尚无返回值。
+None
+&gt;&gt;&gt; result.get()   # 等待，直到任务执行完毕并返回值。
+8
+&gt;&gt;&gt; result.result # 直接返回结果，不产生任何错误。
+8
+&gt;&gt;&gt; result.successful() # 任务是否成功执行，如果成功则返回值 True。
+True
+</code></pre>
+<p>如果任务执行过程中发生了异常，<code>result.successful()</code> 的返回值将会变成 <code>False</code>，同时 <code>result.result</code> 将包含一个由 task 产生的异常实例。</p>
+
+  </content>
+</article>
+
+<script src="https://utteranc.es/client.js"
+        repo="muxueqz/muxueqz-blog"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    <section id=nav>
+      <h1><a href="/"></a></h1>
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </section>
+
+
+</body>
+  <!-- Google Analytics (that's right, I'm tracking you) -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+        var pageTracker = _gat._getTracker("UA-33825897-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  <script src="/static/prism.js"></script>
+</html>
+
+

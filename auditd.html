@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="muxueqz">
+  
+<title>用auditd找到在Linux中乱建文件的家伙！ - QingZhuo Blog</title>
+<meta property="og:title" content="用auditd找到在Linux中乱建文件的家伙！ - QingZhuo Blog">
+<meta property="og:tags" content="auditd,系统运维,server">
+
+<meta property="og:description" content="找出在Linux里文件莫名其妙被创建/被修改的原因">
+
+<meta property="og:image" content="https://muxueqz.top/static/me.png">
+
+<meta name="twitter:image:alt" content="Avatar for muxueqz">
+
+<meta property="og:url" content="https://muxueqz.top/auditd.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@muxueqz">
+
+  <!-- Syntax highlighting css -->
+  <link href="/static/prism.css" rel="stylesheet" />
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+    <link rel="canonical" href="/">
+
+    <style>
+  * {
+    border:0;
+    font:inherit;
+    font-size:100%;
+    vertical-align:baseline;
+    margin:0;
+    padding:0;
+    color: black;
+  }
+
+  body {
+    font-family:'Open Sans', 'Myriad Pro', Myriad, sans-serif;
+    font-size:17px;
+    line-height:160%;
+    color:#1d1313;
+    max-width:700px;
+    margin:auto;
+  }
+
+  p {
+    margin: 20px 0;
+  }
+
+  a img {
+    border:none;
+  }
+
+  img {
+    margin: 10px auto 10px auto;
+    max-width: 100%;
+    display: block;
+  }
+
+  pre, code {
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    background-color: #f7f7f7;
+  }
+
+  code {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  pre {
+    margin-top: 0;
+    margin-bottom: 16px;
+    word-wrap: normal;
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+  }
+
+  pre>code {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    word-break: normal;
+    white-space: pre;
+    background: transparent;
+    border: 0;
+  }
+
+  pre code {
+    display: inline;
+    max-width: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
+    background-color: transparent;
+    border: 0;
+  }
+
+  pre code::before,
+  pre code::after {
+    content: normal;
+  }
+
+  em,q,em,dfn {
+    font-style:italic;
+  }
+
+  .sans,html .gist .gist-file .gist-meta {
+    font-family:"Open Sans","Myriad Pro",Myriad,sans-serif;
+  }
+
+  .mono,pre,code,tt,p code,li code {
+    font-family:Menlo,Monaco,"Andale Mono","lucida console","Courier New",monospace;
+  }
+
+  .heading,.serif,h1,h2,h3 {
+    font-family:"Old Standard TT",serif;
+  }
+
+  strong {
+    font-weight:600;
+  }
+
+  q:before {
+    content:"\201C";
+  }
+
+  q:after {
+    content:"\201D";
+  }
+
+  del,s {
+    text-decoration:line-through;
+  }
+
+  blockquote {
+    font-family:"Old Standard TT",serif;
+    text-align:center;
+    padding:50px;
+  }
+
+  blockquote p {
+    display:inline-block;
+    font-style:italic;
+  }
+
+  blockquote:before,blockquote:after {
+    font-family:"Old Standard TT",serif;
+    content:'\201C';
+    font-size:35px;
+    color:#403c3b;
+  }
+
+  blockquote:after {
+    content:'\201D';
+  }
+
+  hr {
+    width:40%;
+    height: 1px;
+    background:#403c3b;
+    margin: 25px auto;
+  }
+
+  h1 {
+    font-size:35px;
+    line-height:100%;
+  }
+
+  h2 {
+    font-size:28px;
+  }
+
+  h3 {
+    font-size:22px;
+    margin-top:18px;
+  }
+
+  h1 a,h2 a,h3 a {
+    text-decoration:none;
+  }
+
+  h1,h2 {
+    margin-top:28px;
+  }
+
+  #sub-header, time {
+    color:#403c3b;
+    font-size:13px;
+  }
+
+  #sub-header {
+    margin: 0 4px;
+  }
+
+  #nav h1 a {
+    font-size:35px;
+    color:#1d1313;
+    line-height:120%;
+  }
+
+  .posts_listing a,#nav a {
+    text-decoration: none;
+  }
+
+  li {
+    margin-left: 20px;
+  }
+
+  #nav ul li:before, .posts_listing li:before {
+    content:'';
+    margin-right:0;
+  }
+
+  #content {
+    text-align:left;
+    width:100%;
+    font-size:15px;
+    padding:60px 0 80px;
+  }
+
+  #content h1,#content h2 {
+    margin-bottom:5px;
+  }
+
+  #content h2 {
+    font-size:25px;
+  }
+
+  #content .entry-content {
+    margin-top:15px;
+  }
+
+  #content time {
+    margin-left:3px;
+  }
+
+  #content h1 {
+    font-size:30px;
+  }
+
+  .highlight {
+    margin: 10px 0;
+  }
+
+  .posts_listing {
+    margin:0 0 50px;
+  }
+
+  .posts_listing li {
+    margin:0 0 25px 15px;
+  }
+
+  .posts_listing li a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  .posts-list a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  #nav {
+    text-align:center;
+    position:static;
+    margin-top:60px;
+  }
+
+  #nav ul {
+    display: table;
+    margin: 8px auto 0 auto;
+  }
+
+  #nav li {
+    list-style-type:none;
+    display:table-cell;
+    font-size:15px;
+    padding: 0 20px;
+  }
+
+  #links {
+    margin: 50px 0 0 0;
+  }
+
+  #links :nth-child(2) {
+    float:right;
+  }
+
+  #not-found {
+    text-align: center;
+  }
+
+  #not-found a {
+    font-family:"Old Standard TT",serif;
+    font-size: 200px;
+    text-decoration: none;
+    display: inline-block;
+    padding-top: 225px;
+  }
+
+  @media (max-width: 750px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:28px;
+    }
+
+    #nav li {
+      font-size:13px;
+      padding: 0 15px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:50px;
+      font-size:14px;
+    }
+
+    #content h1 {
+      font-size:25px;
+    }
+
+    #content h2 {
+      font-size:22px;
+    }
+
+    .posts_listing li div {
+      font-size:12px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:22px;
+    }
+
+    #nav li {
+      font-size:12px;
+      padding: 0 10px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:20px;
+      font-size:12px;
+    }
+
+    #content h1 {
+      font-size:20px;
+    }
+
+    #content h2 {
+      font-size:18px;
+    }
+
+    .posts_listing li div{
+      font-size:12px;
+    }
+  }
+</style>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+    
+  </head>
+
+  <body>
+    
+<article>
+  <h1>用auditd找到在Linux中乱建文件的家伙！</h1>
+  <aside>
+    <div id="sub-header">
+      2015-03-24 11:34
+            <a class="label" href="/tags/auditd.html">
+        auditd
+        </a>
+                <a class="label" href="/tags/系统运维.html">
+        系统运维
+        </a>
+                <a class="label" href="/tags/server.html">
+        server
+        </a>
+        
+    · <a href="/">view all posts</a>
+    </div>
+  </aside>
+  <content>
+    <p>最近有一台服务器上的日志在切割之后新日志属主经常会变成root，
+那么，监控是哪个家伙来改的吧！</p>
+<p>使用auditd针对/data/logs/app/进行监控 :</p>
+<pre><code>auditctl -w /data/logs/app/ -p wxa -k php_app_change
+</code></pre>
+<p>第二天查看监控结果</p>
+<pre><code>ausearch -k php_app_change | less
+</code></pre>
+<p>用/搜索CREATE 有用内容如下：</p>
+<pre><code>time-&gt;Mon Mar 23 23:59:02 2015
+type=PATH msg=audit(1427126342.023:1289345): item=1 name=&quot;/data/logs/app/http_access.log&quot; inode=3418062 dev=fd:00 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=unconfined_u:object_r:default_t:s0 nametype=CREATE
+type=PATH msg=audit(1427126342.023:1289345): item=0 name=&quot;/data/logs/app/&quot; inode=3417449 dev=fd:00 mode=040755 ouid=500 ogid=500 rdev=00:00 obj=unconfined_u:object_r:default_t:s0 nametype=PARENT
+type=CWD msg=audit(1427126342.023:1289345):  cwd=&quot;/root&quot;
+type=SYSCALL msg=audit(1427126342.023:1289345): arch=c000003e syscall=2 success=yes exit=5 a0=c271098 a1=441 a2=1b6 a3=1e items=2 ppid=8923 pid=14003 auid=501 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=152893 comm=&quot;php&quot; exe=&quot;/usr/local/php/bin/php&quot; subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=&quot;php_app_change&quot;
+</code></pre>
+<p>由此可见，是用root运行的php导致，再看对应的ppid(父进程号):</p>
+<pre><code>#21#root@ctc-bjlg-xoyo-web19-KIDC160630 ~]$ ps aux | grep 8923
+  root      8923  0.0  0.0 106232  1472 ?        S    Mar15  11:05 sh /data/cli/watchdog.sh
+</code></pre>
+<p>watchdog.sh脚本中有许多运行php脚本的地方</p>
+<p>找到这个坏家伙了！</p>
+
+  </content>
+</article>
+
+<script src="https://utteranc.es/client.js"
+        repo="muxueqz/muxueqz-blog"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    <section id=nav>
+      <h1><a href="/"></a></h1>
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </section>
+
+
+</body>
+  <!-- Google Analytics (that's right, I'm tracking you) -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+        var pageTracker = _gat._getTracker("UA-33825897-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  <script src="/static/prism.js"></script>
+</html>
+
+

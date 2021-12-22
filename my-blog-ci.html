@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="muxueqz">
+  
+<title>静态博客持续集成大法 - QingZhuo Blog</title>
+<meta property="og:title" content="静态博客持续集成大法 - QingZhuo Blog">
+<meta property="og:tags" content="系统运维,DevOps,nim">
+
+<meta property="og:description" content="">
+
+<meta property="og:image" content="https://muxueqz.top/static/me.png">
+
+<meta name="twitter:image:alt" content="Avatar for muxueqz">
+
+<meta property="og:url" content="https://muxueqz.top/my-blog-ci.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@muxueqz">
+
+  <!-- Syntax highlighting css -->
+  <link href="/static/prism.css" rel="stylesheet" />
+
+  <link rel="shortcut icon" href="/favicon.ico">
+
+    <link rel="canonical" href="/">
+
+    <style>
+  * {
+    border:0;
+    font:inherit;
+    font-size:100%;
+    vertical-align:baseline;
+    margin:0;
+    padding:0;
+    color: black;
+  }
+
+  body {
+    font-family:'Open Sans', 'Myriad Pro', Myriad, sans-serif;
+    font-size:17px;
+    line-height:160%;
+    color:#1d1313;
+    max-width:700px;
+    margin:auto;
+  }
+
+  p {
+    margin: 20px 0;
+  }
+
+  a img {
+    border:none;
+  }
+
+  img {
+    margin: 10px auto 10px auto;
+    max-width: 100%;
+    display: block;
+  }
+
+  pre, code {
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    background-color: #f7f7f7;
+  }
+
+  code {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  pre {
+    margin-top: 0;
+    margin-bottom: 16px;
+    word-wrap: normal;
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+  }
+
+  pre>code {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    word-break: normal;
+    white-space: pre;
+    background: transparent;
+    border: 0;
+  }
+
+  pre code {
+    display: inline;
+    max-width: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
+    background-color: transparent;
+    border: 0;
+  }
+
+  pre code::before,
+  pre code::after {
+    content: normal;
+  }
+
+  em,q,em,dfn {
+    font-style:italic;
+  }
+
+  .sans,html .gist .gist-file .gist-meta {
+    font-family:"Open Sans","Myriad Pro",Myriad,sans-serif;
+  }
+
+  .mono,pre,code,tt,p code,li code {
+    font-family:Menlo,Monaco,"Andale Mono","lucida console","Courier New",monospace;
+  }
+
+  .heading,.serif,h1,h2,h3 {
+    font-family:"Old Standard TT",serif;
+  }
+
+  strong {
+    font-weight:600;
+  }
+
+  q:before {
+    content:"\201C";
+  }
+
+  q:after {
+    content:"\201D";
+  }
+
+  del,s {
+    text-decoration:line-through;
+  }
+
+  blockquote {
+    font-family:"Old Standard TT",serif;
+    text-align:center;
+    padding:50px;
+  }
+
+  blockquote p {
+    display:inline-block;
+    font-style:italic;
+  }
+
+  blockquote:before,blockquote:after {
+    font-family:"Old Standard TT",serif;
+    content:'\201C';
+    font-size:35px;
+    color:#403c3b;
+  }
+
+  blockquote:after {
+    content:'\201D';
+  }
+
+  hr {
+    width:40%;
+    height: 1px;
+    background:#403c3b;
+    margin: 25px auto;
+  }
+
+  h1 {
+    font-size:35px;
+    line-height:100%;
+  }
+
+  h2 {
+    font-size:28px;
+  }
+
+  h3 {
+    font-size:22px;
+    margin-top:18px;
+  }
+
+  h1 a,h2 a,h3 a {
+    text-decoration:none;
+  }
+
+  h1,h2 {
+    margin-top:28px;
+  }
+
+  #sub-header, time {
+    color:#403c3b;
+    font-size:13px;
+  }
+
+  #sub-header {
+    margin: 0 4px;
+  }
+
+  #nav h1 a {
+    font-size:35px;
+    color:#1d1313;
+    line-height:120%;
+  }
+
+  .posts_listing a,#nav a {
+    text-decoration: none;
+  }
+
+  li {
+    margin-left: 20px;
+  }
+
+  #nav ul li:before, .posts_listing li:before {
+    content:'';
+    margin-right:0;
+  }
+
+  #content {
+    text-align:left;
+    width:100%;
+    font-size:15px;
+    padding:60px 0 80px;
+  }
+
+  #content h1,#content h2 {
+    margin-bottom:5px;
+  }
+
+  #content h2 {
+    font-size:25px;
+  }
+
+  #content .entry-content {
+    margin-top:15px;
+  }
+
+  #content time {
+    margin-left:3px;
+  }
+
+  #content h1 {
+    font-size:30px;
+  }
+
+  .highlight {
+    margin: 10px 0;
+  }
+
+  .posts_listing {
+    margin:0 0 50px;
+  }
+
+  .posts_listing li {
+    margin:0 0 25px 15px;
+  }
+
+  .posts_listing li a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  .posts-list a:hover,#nav a:hover {
+    text-decoration: underline;
+  }
+
+  #nav {
+    text-align:center;
+    position:static;
+    margin-top:60px;
+  }
+
+  #nav ul {
+    display: table;
+    margin: 8px auto 0 auto;
+  }
+
+  #nav li {
+    list-style-type:none;
+    display:table-cell;
+    font-size:15px;
+    padding: 0 20px;
+  }
+
+  #links {
+    margin: 50px 0 0 0;
+  }
+
+  #links :nth-child(2) {
+    float:right;
+  }
+
+  #not-found {
+    text-align: center;
+  }
+
+  #not-found a {
+    font-family:"Old Standard TT",serif;
+    font-size: 200px;
+    text-decoration: none;
+    display: inline-block;
+    padding-top: 225px;
+  }
+
+  @media (max-width: 750px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:28px;
+    }
+
+    #nav li {
+      font-size:13px;
+      padding: 0 15px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:50px;
+      font-size:14px;
+    }
+
+    #content h1 {
+      font-size:25px;
+    }
+
+    #content h2 {
+      font-size:22px;
+    }
+
+    .posts_listing li div {
+      font-size:12px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    body {
+      padding-left:20px;
+      padding-right:20px;
+    }
+
+    #nav h1 a {
+      font-size:22px;
+    }
+
+    #nav li {
+      font-size:12px;
+      padding: 0 10px;
+    }
+
+    #content {
+      margin-top:0;
+      padding-top:20px;
+      font-size:12px;
+    }
+
+    #content h1 {
+      font-size:20px;
+    }
+
+    #content h2 {
+      font-size:18px;
+    }
+
+    .posts_listing li div{
+      font-size:12px;
+    }
+  }
+</style>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+    
+  </head>
+
+  <body>
+    
+<article>
+  <h1>静态博客持续集成大法</h1>
+  <aside>
+    <div id="sub-header">
+      2019-08-09 22:20
+            <a class="label" href="/tags/系统运维.html">
+        系统运维
+        </a>
+                <a class="label" href="/tags/DevOps.html">
+        DevOps
+        </a>
+                <a class="label" href="/tags/nim.html">
+        nim
+        </a>
+        
+    · <a href="/">view all posts</a>
+    </div>
+  </aside>
+  <content>
+    <h1>前言</h1>
+<p>因为最近自己造了<a href="/a-small-static-site-generator.html">静态博客的轮子</a> ， 之前看到可以用CI来自动build页面并部署，一直想试试，这次就顺便试试。</p>
+<p>本来一开始选择的是开源界流行的<code>travis-ci</code>，不过在尝试过程中忽然不再build，我怀疑是超出一定的次数限制，</p>
+<p>因此转向<a href="https://cloud.drone.io/">Drone Cloud</a>。</p>
+<h1>那么，通过Drone CI自动部署需要几步？</h1>
+<p>配置pipeline编排:</p>
+<ol>
+<li>下载静态博客构建代码，这里采用我自己写的<a href="https://github.com/muxueqz/kun">kun</a></li>
+<li>下载代码，我把它放在了 https://github.com/muxueqz/muxueqz-blog.git</li>
+<li>编译静态博客构建工具</li>
+<li>构建静态页面</li>
+<li>通过git push部署到git仓库，我用的是国内的coding.net，需要注意的是：
+<ul>
+<li>SSH密钥通过Drone的secret来存取，而不暴露在公开的git仓库中（因为<code>.drone.yml</code>是在公开的git仓库中）</li>
+<li>需要在coding.net的仓库中添加Deploy Key并允许推送</li>
+<li>因为我的HTML是托管在coding.net上，所以不能使用Drone的Github Pages插件，找到一个<code>drone-git-push</code>，但试了半天都用不了，看Drone的bash插件写起来很简单，索性自己写一个。</li>
+</ul>
+</li>
+</ol>
+<h1>编写Drone配置文件</h1>
+<p>在文章源码仓库（对我来说是https://github.com/muxueqz/muxueqz-blog.git）中增加<code>.drone.yml</code>文件，内容如下：</p>
+<pre><code class="language-yaml">---
+kind: pipeline
+name: default
+
+clone:
+  disable: true
+
+steps:
+- name: clone
+  image: docker:git
+  commands:
+  # 下载静态博客构建代码
+  - git clone https://github.com/muxueqz/kun.git
+  # 下载代码
+  - git clone https://github.com/muxueqz/muxueqz-blog.git
+
+- name: build
+  image: nimlang/nim
+  commands:
+  # 编译静态博客构建工具
+  - nimble install -y nwt markdown
+  - cd kun
+  - nim c -d:release build.nim
+  - rm -rf srcs
+  - mv -v ../muxueqz-blog/ srcs
+  - mkdir -pv public/tags/
+  # 构建静态页面
+  - ./build
+
+# 通过git push部署到git仓库，我用的是国内的coding.net
+- name: git_push
+  image: muxueqz/drone-git-push-by-bash
+  settings:
+    branch: master
+    remote: git@git.coding.net:muxueqz/muxueqz.git
+    force: true
+    commit: true
+    path: ./kun/public
+    ssh_key:
+      from_secret: GIT_PUSH_SSH_KEY
+</code></pre>
+<h2>安装Drone客户端</h2>
+<pre><code class="language-bash">wget https://github.com/drone/drone-cli/releases/download/v1.1.0/drone_linux_amd64.tar.gz
+tar xvf drone_linux_amd64.tar.gz
+cp -v drone /usr/bin/
+</code></pre>
+<h2>配置Drone Secret</h2>
+<pre><code class="language-bash"># 将ssh私钥添加到Drone的secret配置中
+drone secret add --repository muxueqz/muxueqz-blog --name GIT_PUSH_SSH_KEY --data @/tmp/iam_logs/pages_id_rsa
+drone sign muxueqz/muxueqz-blog  --save
+</code></pre>
+<h1>编写Drone Git Push插件</h1>
+<p>其实非常简单，ENTRYPOINT脚本这样写就可以了：</p>
+<pre><code class="language-bash">#!/bin/sh
+
+mkdir -pv $HOME/.ssh
+echo &quot;${PLUGIN_SSH_KEY}&quot; &gt; $HOME/.ssh/id_rsa
+chmod 400 $HOME/.ssh/id_rsa
+cd ${PLUGIN_PATH}
+
+export GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no'
+git config --global user.name $DRONE_COMMIT_AUTHOR
+git config --global user.email $DRONE_COMMIT_AUTHOR_EMAIL
+git init
+git add .
+[ -z $PLUGIN_COMMIT_MESSAGE ] &amp;&amp; PLUGIN_COMMIT_MESSAGE='push'
+[ $PLUGIN_FORCE == &quot;true&quot; ] &amp;&amp; PLUGIN_FORCE='--force'
+git commit . -m &quot;${PLUGIN_COMMIT_MESSAGE}&quot;
+git remote add origin ${PLUGIN_REMOTE}
+git push --set-upstream origin master ${PLUGIN_FORCE}
+</code></pre>
+<p>完整Docker容器在这里：<a href="https://github.com/muxueqz/drone-git-push-by-bash">drone-git-push-by-bash</a></p>
+<h1>CI Dashboard效果</h1>
+<p><img src="https://user-images.githubusercontent.com/730639/62789429-78ef0a00-bafb-11e9-949a-cef436e77ef4.png" alt="image" /></p>
+<h1>总结</h1>
+<ul>
+<li>Drone作为基于Docker的CI/CD平台，和Docker结合得非常好，可以直接调用Docker容器中的命令，用起来很爽。</li>
+<li>基于bash的自定义插件写起来也很方便，分分钟就写好了，以CI的角度，似乎都没有必要用Go写插件</li>
+</ul>
+<p>本文通过Drone CI构建部署而成。</p>
+
+  </content>
+</article>
+
+<script src="https://utteranc.es/client.js"
+        repo="muxueqz/muxueqz-blog"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+    <section id=nav>
+      <h1><a href="/"></a></h1>
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+      </ul>
+    </section>
+
+
+</body>
+  <!-- Google Analytics (that's right, I'm tracking you) -->
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+        var pageTracker = _gat._getTracker("UA-33825897-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+  <script src="/static/prism.js"></script>
+</html>
+
+
