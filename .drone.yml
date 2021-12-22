@@ -39,23 +39,14 @@ steps:
 
 # 通过git push部署到git仓库，我用的是国内的coding.net
 - name: git_push
-  image: ghcr.io/muxueqz/drone-git-push-by-bash:master
-  # image: ghcr.io/muxueqz/drone-git-push-by-bash:v1.0.0
+  # image: ghcr.io/muxueqz/drone-git-push-by-bash:master
+  image: ghcr.io/muxueqz/drone-git-push-by-bash:v1.0.1
   # image: ghcr.io/muxueqz/drone-git-push-by-bash:sha256-64a7502876a23d4572848ee14859ff7be6657a093e2e1cf8a09bdf97376eab33.sig
   settings:
     branch: pages
     remote: git@github.com:muxueqz/muxueqz-blog.git
     force: false
     # init: false
-    # commit: true
     path: ./kun/public
     ssh_key:
       from_secret: GIT_PUSH_SSH_KEY
-
-# - name: git_push
-#   image: plugins/gh-pages
-#   settings:
-#     pages_directory: ./
-#     target_branch: pages
-#     ssh_key:
-#       from_secret: GIT_PUSH_SSH_KEY
