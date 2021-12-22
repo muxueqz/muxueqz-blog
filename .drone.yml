@@ -37,24 +37,24 @@ steps:
   - chmod +x build
   - ./build
 
-# # 通过git push部署到git仓库，我用的是国内的coding.net
-# - name: git_push
-  # image: muxueqz/drone-git-push-by-bash
-  # image: ghcr.io/muxueqz/drone-git-push-by-bash:master
-  # settings:
-  #   branch: pages
-  #   # remote: git@git.coding.net:muxueqz/muxueqz.git
-  #   remote: git@github.com:muxueqz/muxueqz-blog.git
-  #   force: true
-  #   commit: true
-  #   path: ./kun/public
-  #   ssh_key:
-  #     from_secret: GIT_PUSH_SSH_KEY
-
+# 通过git push部署到git仓库，我用的是国内的coding.net
 - name: git_push
-  image: plugins/gh-pages
+  image: muxueqz/drone-git-push-by-bash
+  image: ghcr.io/muxueqz/drone-git-push-by-bash:master
   settings:
-    pages_directory: ./
-    target_branch: pages
+    branch: pages
+    # remote: git@git.coding.net:muxueqz/muxueqz.git
+    remote: git@github.com:muxueqz/muxueqz-blog.git
+    force: true
+    commit: true
+    path: ./kun/public
     ssh_key:
       from_secret: GIT_PUSH_SSH_KEY
+
+# - name: git_push
+#   image: plugins/gh-pages
+#   settings:
+#     pages_directory: ./
+#     target_branch: pages
+#     ssh_key:
+#       from_secret: GIT_PUSH_SSH_KEY
