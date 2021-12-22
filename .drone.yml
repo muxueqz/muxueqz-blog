@@ -39,8 +39,8 @@ steps:
 
 # 通过git push部署到git仓库，我用的是国内的coding.net
 - name: git_push
-  image: ghcr.io/muxueqz/drone-git-push-by-bash:master
-  # image: ghcr.io/muxueqz/drone-git-push-by-bash:v1.0.1
+  # image: ghcr.io/muxueqz/drone-git-push-by-bash:master
+  image: ghcr.io/muxueqz/drone-git-push-by-bash:v1.0.2
   settings:
     branch: pages
     remote: git@github.com:muxueqz/muxueqz-blog.git
