@@ -45,7 +45,7 @@ steps:
   settings:
     branch: pages
     remote: git@github.com:muxueqz/muxueqz-blog.git
-    force: false
+    # force: false
     init: false
     # commit: true
     path: ./kun/public
