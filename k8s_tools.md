@@ -22,6 +22,8 @@ podman run --rm -it -p 14122:14122 \
   --kubeconfig=/dev/shm/kube_config --debug
 ```
 
+![](https://raw.githubusercontent.com/kubenav/kubenav/master/utils/assets/github-screenshot.png) 
+
 ---
 # kubernetes dashboard
 kubernetes官方出品，比较朴实，不能切换context
@@ -33,6 +35,7 @@ podman run --rm -it -p 14122:9090 \
   kubernetesui/dashboard:v2.6.1 \
   --kubeconfig /dev/shm/kube_config
 ```
+![](https://github.com/kubernetes/dashboard/raw/master/docs/images/dashboard-ui.png) 
 
 ---
 # kubectl命令补全
@@ -40,6 +43,8 @@ podman run --rm -it -p 14122:9090 \
 kubectl completion bash > kubectl.bash
 source kubectl.bash
 ```
+![](https://k9scli.io/assets/screens/pods.png) 
+![](https://k9scli.io/assets/screens/logs.png) 
 
 ---
 # k9s
