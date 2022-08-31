@@ -8,6 +8,13 @@
     rel="self" type="application/rss+xml" />
 
       <item>
+    <title>k8s管理利器</title>
+    <link>https://muxueqz.top/k8s-tools.html</link>
+    <guid>https://muxueqz.top/k8s-tools.html</guid>
+    <pubDate>Wed, 31 Aug 2022 01:20:00 GMT</pubDate>
+  </item>
+    
+  <item>
     <title>用Nim语言开发CKB合约</title>
     <link>https://muxueqz.top/nim-on-ckb.html</link>
     <guid>https://muxueqz.top/nim-on-ckb.html</guid>

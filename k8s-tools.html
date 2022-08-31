@@ -8,8 +8,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="muxueqz">
   
-<title>系统运维 - QingZhuo Blog</title>
-<meta property="og:title" content="系统运维 - QingZhuo Blog">
+<title>k8s管理利器 - QingZhuo Blog</title>
+<meta property="og:title" content="k8s管理利器 - QingZhuo Blog">
+<meta property="og:tags" content="系统运维,DevOps,kubernetes">
+
+<meta property="og:description" content="">
+
+<meta property="og:image" content="https://muxueqz.top/static/me.png">
+
+<meta name="twitter:image:alt" content="Avatar for muxueqz">
+
+<meta property="og:url" content="https://muxueqz.top/k8s-tools.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@muxueqz">
 
   <!-- Syntax highlighting css -->
   <link href="/static/prism.css" rel="stylesheet" />
@@ -371,48 +382,81 @@
 
   <body>
     
-<nav>
-  <h1>系统运维</h1>
-  <dl class="posts-list">
-              <h2>
-            <a href="/k8s-tools.html"> k8s管理利器 </a>
-          </h2>
-          <div id=date>
-            <time>2022-08-31 09:20</time>
-          </div>
-                    <h2>
-            <a href="/keepass2pass.html"> 迁移密码管理器始末，从KeePass到Pass </a>
-          </h2>
-          <div id=date>
-            <time>2019-09-13 11:34</time>
-          </div>
-                    <h2>
-            <a href="/my-blog-ci.html"> 静态博客持续集成大法 </a>
-          </h2>
-          <div id=date>
-            <time>2019-08-09 22:20</time>
-          </div>
-                    <h2>
-            <a href="/tick.html"> 新兴监控平台InfluxDB（TICK）初体验 </a>
-          </h2>
-          <div id=date>
-            <time>2019-08-08 18:20</time>
-          </div>
-                    <h2>
-            <a href="/heka.html"> Heka </a>
-          </h2>
-          <div id=date>
-            <time>2015-05-30 13:20</time>
-          </div>
-                    <h2>
-            <a href="/auditd.html"> 用auditd找到在Linux中乱建文件的家伙！ </a>
-          </h2>
-          <div id=date>
-            <time>2015-03-24 11:34</time>
-          </div>
-          
-  </dl>
-</nav>
+<article>
+  <h1>k8s管理利器</h1>
+  <aside>
+    <div id="sub-header">
+      2022-08-31 09:20
+            <a class="label" href="/tags/系统运维.html">
+        系统运维
+        </a>
+                <a class="label" href="/tags/DevOps.html">
+        DevOps
+        </a>
+                <a class="label" href="/tags/kubernetes.html">
+        kubernetes
+        </a>
+        
+    · <a href="/">view all posts</a>
+    </div>
+  </aside>
+  <content>
+    <h1>帮助我们更高效的管理k8s</h1>
+<ul>
+<li>kubectl命令补全</li>
+<li>kubenav</li>
+<li>kubernetes dashboard</li>
+<li>k9s</li>
+</ul>
+<hr />
+<h1>kubenav</h1>
+<p>安装：</p>
+<pre><code class="language-bash">podman run --rm -it -p 14122:14122 \
+  -v ~/.kube/config:/dev/shm/kube_config:ro \
+  kubenav/kubenav:master \
+  --kubeconfig=/dev/shm/kube_config --debug
+</code></pre>
+<hr />
+<h1>kubernetes dashboard</h1>
+<p>kubernetes官方出品，比较朴实，不能切换context</p>
+<p>安装：</p>
+<pre><code class="language-bash">podman run --rm -it -p 14122:9090 \
+  -v ~/.kube/config:/dev/shm/kube_config:ro \
+  kubernetesui/dashboard:v2.6.1 \
+  --kubeconfig /dev/shm/kube_config
+</code></pre>
+<hr />
+<h1>kubectl命令补全</h1>
+<pre><code class="language-bash">kubectl completion bash &gt; kubectl.bash
+source kubectl.bash
+</code></pre>
+<hr />
+<h1>k9s</h1>
+<ul>
+<li>多个context切换</li>
+<li>切换qa和生产环境的k8s集群</li>
+<li>管理deployments</li>
+<li>查看日志
+<ul>
+<li>查看上一次日志</li>
+</ul>
+</li>
+<li>管理pod</li>
+<li>进入shell</li>
+<li>管理ingress</li>
+</ul>
+
+  </content>
+</article>
+
+<script src="https://utteranc.es/client.js"
+        repo="muxueqz/muxueqz-blog"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
 
     <section id=nav>
       <h1><a href="/"></a></h1>

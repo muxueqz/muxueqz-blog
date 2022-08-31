@@ -4,8 +4,24 @@
   <link href="https://muxueqz.top" rel="alternate"></link>
   <link href="https://muxueqz.top/all.atom.xml" rel="self"></link>
   <id>https://muxueqz.top</id>
-  <updated>2020-06-09T22:20:00+00:00</updated>
+  <updated>2022-08-31T09:20:00+00:00</updated>
       <entry>
+    <title>k8s管理利器</title>
+    <link href="https://muxueqz.top/k8s-tools.html" rel="alternate"></link>
+    <published>2022-08-31T09:20:00+00:00</published>
+    <updated>2022-08-31T09:20:00+00:00</updated>
+    <author><name>muxueqz</name></author>
+    <id>tag:muxueqz.top,2022-08-31:/k8s-tools.html</id>
+    <summary type="html"></summary>
+    
+          <category term="系统运维"></category>
+          
+          <category term="DevOps"></category>
+          
+          <category term="kubernetes"></category>
+          
+</entry>
+  <entry>
     <title>用Nim语言开发CKB合约</title>
     <link href="https://muxueqz.top/nim-on-ckb.html" rel="alternate"></link>
     <published>2020-06-09T22:20:00+00:00</published>
