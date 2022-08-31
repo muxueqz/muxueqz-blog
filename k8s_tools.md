@@ -43,8 +43,6 @@ podman run --rm -it -p 14122:9090 \
 kubectl completion bash > kubectl.bash
 source kubectl.bash
 ```
-![](https://k9scli.io/assets/screens/pods.png) 
-![](https://k9scli.io/assets/screens/logs.png) 
 
 ---
 # k9s
@@ -56,3 +54,5 @@ source kubectl.bash
 * 管理pod
 * 进入shell
 * 管理ingress
+![](https://k9scli.io/assets/screens/pods.png) 
+![](https://k9scli.io/assets/screens/logs.png) 
