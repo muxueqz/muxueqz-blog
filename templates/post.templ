@@ -1,0 +1,42 @@
+{% extends "layout.templ" %}
+
+{% block meta_data %}
+<title>{{Title}} - QingZhuo Blog</title>
+<meta property="og:title" content="{{Title}} - QingZhuo Blog">
+<meta property="og:tags" content="{{Tags}}">
+
+<meta property="og:description" content="{{Summary}}">
+
+<meta property="og:image" content="{{root}}/static/me.png">
+
+<meta name="twitter:image:alt" content="Avatar for muxueqz">
+
+<meta property="og:url" content="{{root}}/{{Slug}}.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@muxueqz">
+{% endblock %}
+
+{% block content %}
+<article>
+  <h1>{{Title}}</h1>
+  <aside>
+    <div id="sub-header">
+      {{Date}}
+    {{tag_links}}
+    · <a href="/">view all posts</a>
+    </div>
+  </aside>
+  <content>
+    {{content}}
+  </content>
+</article>
+
+<script src="https://utteranc.es/client.js"
+        repo="muxueqz/muxueqz-blog"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+{% endblock %}

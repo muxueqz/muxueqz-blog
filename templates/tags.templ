@@ -1,0 +1,14 @@
+{% extends "layout.templ" %}
+{% block meta_data %}
+<title>{{tag_name}} - QingZhuo Blog</title>
+<meta property="og:title" content="{{tag_name}} - QingZhuo Blog">
+{% endblock %}
+
+{% block content %}
+<nav>
+  <h1>{{tag_name}}</h1>
+  <dl class="posts-list">
+    {{content}}
+  </dl>
+</nav>
+{% endblock %}
