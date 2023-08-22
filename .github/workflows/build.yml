@@ -16,7 +16,7 @@ permissions:
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: false
 
 jobs:
@@ -52,11 +52,15 @@ jobs:
           chmod +x build
           ./build
           # chown -R 1000.1000 .
-          chown -R nobody .
+          # chown -R nobody .
 
       - name: List
         run: |
           ls -alhtR
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./kun/public
 
       - name: Git Push
         uses: ad-m/github-push-action@v0.5.0
@@ -66,3 +70,15 @@ jobs:
           force: false
           directory: ./kun/public
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
