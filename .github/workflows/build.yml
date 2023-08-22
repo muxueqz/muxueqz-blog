@@ -39,6 +39,7 @@ jobs:
           mkdir -pv public/tags/
           chmod +x build
           ./build
+          chown -R 1000.1000 .
 
       - name: List
         run: |
