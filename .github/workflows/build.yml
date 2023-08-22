@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          path: srcs
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -33,7 +35,7 @@ jobs:
         run: |
           cd kun
           rm -rf srcs
-          mv -v ../muxueqz-blog/ srcs
+          mv -v ../srcs/ srcs
           mkdir -pv public/tags/
           chmod +x build
           ./build
