@@ -18,7 +18,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
       with:
-        repository: https://github.com/muxueqz/kun.git
+        repository: muxueqz/kun
 
       
     - name: Configure
