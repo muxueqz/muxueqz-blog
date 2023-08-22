@@ -62,14 +62,14 @@ jobs:
         with:
           path: ./kun/public
 
-      - name: Git Push
-        uses: ad-m/github-push-action@v0.5.0
-        with:
-          branch: pages
-          repository: muxueqz/muxueqz-blog
-          force: false
-          directory: ./kun/public
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Git Push
+      #   uses: ad-m/github-push-action@v0.5.0
+      #   with:
+      #     branch: pages
+      #     repository: muxueqz/muxueqz-blog
+      #     force: false
+      #     directory: ./kun/public
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
 
   # Deployment job
   deploy:
