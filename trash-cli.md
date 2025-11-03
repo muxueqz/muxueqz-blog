@@ -6,27 +6,20 @@ Slug: trash-cli
 Author: muxueqz
 --------------------------------------------------------------------------
 
-If you use Linux long enough, you’ve probably done it too.  
-You type a quick `rm -rf something/`, and a few seconds later realize it was the *wrong* folder.
+If you’ve ever worked on Linux long enough, you know this story:  
+you run a quick `rm -rf something/`, and only afterward realize… it was the *wrong* directory.
 
-I’ve been there — several times.  
-This time, I tried to recover my files using `xfs_undelete`, but as usual with XFS, the deleted data was unrecoverable.  
-So I decided to stop trusting recovery tools and instead **make deletion safer** from the start.
+That happened to me (again). I tried to recover the data using `xfs_undelete`, but as often with XFS, the recovery failed — the deleted files were gone forever.
 
-That’s how my little script — **`trash.sh`** — was born.
+So instead of relying on recovery tools, I decided to **make deletion itself safer**.  
+That’s how my small script, [`trash.sh`](https://github.com/muxueqz/trash.sh), was born.
 
 ---
 
-### 🗑️ What It Does
+### 🗑️ What `trash.sh` Does
 
-Instead of permanently deleting files, `trash.sh` moves them into a **`.trash` directory on the same partition**.  
-That means:
-
-* No accidental cross-device moves
-* No root permission issues
-* Easy cleanup later
-
-Each trashed file is renamed with a timestamp so you can safely trash multiple files with the same name without overwriting.
+`trash.sh` is a lightweight Bash script that replaces risky `rm` operations with something safer.  
+Instead of permanently deleting files, it moves them to a **`.trash` directory on the same partition**, appending a timestamp to avoid name conflicts.
 
 Example:
 
@@ -38,31 +31,34 @@ Example:
 ➡ Moves it to  
 `/data/.trash/myfile.txt-2025-10-31_12-00-00`
 
----
-
-### 🧭 Why a Trash Per Partition?
-
-When I first thought of this, I considered using a global `~/.local/share/Trash` folder (like desktop environments do).  
-But that breaks when you delete files on other mounts (like `/mnt/ssd`, `/data`, or `/usbdrive`) — the `mv` command fails across filesystems.
-
-By creating a `.trash` folder **on the same mount point**, `trash.sh` guarantees that:
-
-* The move is instant (same partition).
-* You can safely clean up per-disk.
-* You avoid cross-device permission headaches.
+This way, every filesystem manages its own trash folder — simple, fast, and cross-partition safe.
 
 ---
 
-### ⚙️ Basic Usage
+### 🧭 Why a Per-Partition Trash Folder?
 
-#### 1. Move Files to Trash
+Desktop environments like GNOME or KDE use a central `~/.local/share/Trash` folder.  
+That works fine for GUI apps, but if you’re moving files across partitions in the terminal, it can fail with *“Invalid cross-device link”* errors.
+
+`trash.sh` solves that by always keeping trash **on the same mount point** as the original file.  
+That means:
+
+* The `mv` operation never crosses devices.
+* No root or permission errors.
+* Each disk or mount can be cleaned up independently.
+
+---
+
+### ⚙️ Usage Overview
+
+#### 1. Move Files or Folders to Trash
 
 ```
 ./trash.sh <file_or_directory>
 
 ```
 
-Moves the target(s) into a `.trash` directory on the same partition, adding a timestamp to avoid name conflicts.
+Moves the target(s) into a `.trash` folder located on the same partition, tagging each with a timestamp.
 
 ---
 
@@ -73,7 +69,7 @@ Moves the target(s) into a `.trash` directory on the same partition, adding a ti
 
 ```
 
-Searches for all `.trash` directories across mounted filesystems, shows what it found, and asks for confirmation before clearing everything.
+Searches for `.trash` directories on all mounted partitions, displays what it finds, and asks for confirmation before deleting their contents.
 
 ---
 
@@ -84,61 +80,55 @@ Searches for all `.trash` directories across mounted filesystems, shows what it 
 
 ```
 
-Clears only the trash folder on the `/data` partition.  
-It shows:
+Clears only `/data/.trash`, showing:
 
 * Number of files
 * Number of directories
-* Total size  
-  Then asks for confirmation before deleting.
+* Total size
+
+Then prompts for confirmation before cleanup.
 
 ---
 
 ### 🧩 Features at a Glance
 
-✅ Moves files safely instead of deleting them  
+✅ Safer alternative to `rm`  
 ✅ Works per partition — no cross-device issues  
-✅ Preserves ownership and permissions of `.trash` folders  
-✅ Supports clearing all or specific trash locations  
-✅ Asks before doing anything destructive
-
----
-
-### 🔒 Why This Is Better Than Just Using `rm`
-
-`rm` is brutally honest — it deletes things permanently, no second chances.  
-`trash.sh` is a simple middle ground: you still work from the terminal, but you get a **layer of safety**.
-
-It’s not bloated, doesn’t need external dependencies, and works even on headless servers where desktop trash systems don’t exist.
+✅ Preserves ownership and permissions  
+✅ Interactive confirmations before clearing  
+✅ Minimal and dependency-free
 
 ---
 
 ### 🚀 Installation
 
-1. Save the script as `trash.sh`.
-2. Make it executable:
+1. Clone it from GitHub:
 
    ```
+   git clone https://github.com/muxueqz/trash.sh
+   cd trash.sh
    chmod +x trash.sh
 
    ```
-3. (Optional) Add it to your `$PATH` or create an alias:
+2. (Optional) Add it to your `$PATH` or alias it:
 
    ```
-   alias rm='~/bin/trash.sh'
+   alias rm='trash.sh'
 
    ```
 
-Now every time you “delete” something, it just moves to a safe `.trash` folder instead.
+Now every time you “delete” something, it’s moved to a safe `.trash` directory instead of being permanently erased.
 
 ---
 
-### 💡 Final Thoughts
+### 💡 Why I Made This
 
-After losing files one too many times, I learned two big lessons:
+After losing important files more than once, I realized two things:
 
-1. Backups are non-negotiable.
-2. Prevention is better than recovery.
+1. Backups are great — but not always up to date.
+2. Recovery tools like `xfs_undelete` can’t save you every time.
 
-`trash.sh` isn’t fancy — it’s a few dozen lines of Bash — but it’s saved me countless headaches already.  
-Sometimes, the simplest tools are the ones that protect you best.
+So I built `trash.sh` to add a **simple safety layer** between me and permanent deletion.  
+It’s not complex, it doesn’t depend on desktop systems, and it works anywhere Bash does.
+
+Sometimes, the best tools are the small ones that prevent big mistakes.
