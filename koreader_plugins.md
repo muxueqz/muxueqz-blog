@@ -10,7 +10,7 @@ Summary: 为 KOReader 增加稍后阅读、书库同步和 Kindle 中文字体�
 
 KOReader 本身已经是一个非常完整的电子书阅读器，不过我的阅读流程里还有一些小问题：看到网页文章时想先收藏，回到 Kindle 后又希望能直接读；设备里的书需要和远程书库同步；Kindle 自带的部分中文字体，却被 KOReader 默认列入了黑名单。
 
-于是有了这个 KOReader Extras 仓库。它不是 KOReader 官方项目，而是一组面向个人使用的插件和补丁，主要解决三个问题：把待读文章变成 EPUB、同步远程书库，以及恢复 Kindle 的部分中日韩字体。
+于是有了这个 [KOReader Extras](https://github.com/muxueqz/koreader-extras) 仓库。它不是 KOReader 官方项目，而是一组面向个人使用的插件和补丁，主要解决三个问题：把待读文章变成 EPUB、同步远程书库，以及恢复 Kindle 的部分中日韩字体。
 
 ## 这组插件解决什么问题？
 
