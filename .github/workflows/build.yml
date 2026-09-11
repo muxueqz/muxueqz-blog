@@ -52,8 +52,9 @@ jobs:
       - name: Build
         run: |
           cd kun
-          rm -rf srcs
+          rm -rf srcs templates
           mv -v ../srcs/ srcs
+          mv -v ../srcs/templates templates
           mkdir -pv public/tags/
           chmod +x build
           ./build
