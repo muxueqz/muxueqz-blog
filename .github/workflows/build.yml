@@ -31,11 +31,11 @@ jobs:
         with:
           path: srcs
 
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          repository: muxueqz/kun
-          path: kun
+      # - name: Checkout code
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: muxueqz/kun
+      #     path: kun
 
       - name: Configure dependencies
         run: |
@@ -44,17 +44,17 @@ jobs:
       - name: Configure
         run: |
           # ls -alhtR
-          cd kun
+          # cd kun
           kun_latest=$(curl 'https://api.github.com/repos/muxueqz/kun/releases/latest' | grep -o '"browser_download_url":[ ]*"[^"]*' | cut -d'"' -f4)
           echo $kun_latest
           curl -L -o build $kun_latest
 
       - name: Build
         run: |
-          cd kun
-          rm -rf srcs templates
-          mv -v ../srcs/ srcs
-          mv -v ../srcs/templates templates
+          # cd kun
+          # rm -rf srcs templates
+          # mv -v ../srcs/ srcs
+          mv -v srcs/templates templates
           mkdir -pv public/tags/
           chmod +x build
           ./build
@@ -65,7 +65,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./kun/public
+          # path: ./kun/public
+          path: ./public
 
       # - name: Git Push
       #   uses: ad-m/github-push-action@v0.5.0
