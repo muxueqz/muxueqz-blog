@@ -1,6 +1,6 @@
 Title: 把飞书云盘挂载到 Linux：feishu-dav
 Date: 2026-10-16 10:00
-Tags: Python, Linux, 工具
+Tags: Python, Linux, 工具, rclone, webdav
 Slug: feishu-dav
 Author: muxueqz
 Summary: 用一个单文件 Python 脚本把飞书云盘变成 WebDAV 服务，再配合 rclone mount 挂载到 Linux 本地目录
