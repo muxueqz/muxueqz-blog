@@ -9,7 +9,7 @@ Summary: 用一个单文件 Python 脚本把飞书云盘变成 WebDAV 服务，�
 
 飞书（Lark）在国内团队协作里用得不少，云盘里堆满了共享的文档、表格和归档文件。但飞书官方并没有提供 Linux 下的同步盘客户端，想在 Linux 上方便地访问云盘文件，往往只能网页版手动下载，或者调用开放平台 API 自己写脚本——都很别扭。
 
-[feishu-dav](https://github.com/muxueqz/larkdav) 就是为了解决这个问题：它把飞书云盘通过 **WebDAV 协议**暴露成本地 HTTP 服务，再用 `rclone mount` 挂载成一个本地目录。之后你就可以像操作普通文件夹一样浏览、读取、上传飞书云盘里的文件了。
+[feishu-dav](https://github.com/muxueqz/feishu-dav) 就是为了解决这个问题：它把飞书云盘通过 **WebDAV 协议**暴露成本地 HTTP 服务，再用 `rclone mount` 挂载成一个本地目录。之后你就可以像操作普通文件夹一样浏览、读取、上传飞书云盘里的文件了。
 
 整个项目只有一个 Python 文件 `feishu_dav.py`，依赖也很少：
 
