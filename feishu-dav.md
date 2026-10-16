@@ -9,7 +9,7 @@ Summary: 用一个单文件 Python 脚本把飞书云盘变成 WebDAV 服务，�
 
 飞书（Lark）在国内团队协作里用得不少，云盘里堆满了共享的文档、表格和归档文件。但飞书官方并没有提供 Linux 下的同步盘客户端，想在 Linux 上方便地访问云盘文件，往往只能网页版手动下载，或者调用开放平台 API 自己写脚本——都很别扭。
 
-[feishu-dav](https://github.com/muxueqz/feishu-dav) 就是为了解决这个问题：它把飞书云盘通过 **WebDAV 协议**暴露成本地 HTTP 服务，再用 `rclone mount` 挂载成一个本地目录。之后你就可以像操作普通文件夹一样浏览、读取、上传飞书云盘里的文件了。
+[feishu-dav](https://github.com/muxueqz/larkdav) 就是为了解决这个问题：它把飞书云盘通过 **WebDAV 协议**暴露成本地 HTTP 服务，再用 `rclone mount` 挂载成一个本地目录。之后你就可以像操作普通文件夹一样浏览、读取、上传飞书云盘里的文件了。
 
 整个项目只有一个 Python 文件 `feishu_dav.py`，依赖也很少：
 
@@ -62,8 +62,14 @@ python feishu_dav.py --doctor     # 自检配置/凭证/挂载点，给出修复
 ```bash
 rclone config create feishu webdav url=http://127.0.0.1:8765 vendor=other
 mkdir -p ~/feishu
-rclone mount feishu: ~/feishu --vfs-cache-mode writes --daemon
+rclone mount feishu: ~/feishu --exclude "~.*" --dir-cache-time 3s --vfs-cache-mode off --daemon
 ```
+
+这几个参数都有讲究：
+
+* `--exclude "~.*"`：WPS/LibreOffice 编辑本地文档时会在同目录创建 `~$xxx.docx` 之类的锁文件和临时文件，不过滤的话它们会被 rclone 悄悄同步到飞书云盘，时间长了云盘里全是垃圾
+* `--dir-cache-time 3s`：目录缓存只留 3 秒——在线文档是 lazy 导出（未缓存时报 10K 占位大小，首次打开才触发导出），目录缓存短一点，真实大小和完整内容才能尽快生效
+* `--vfs-cache-mode off`：流式读取，和 lazy 导出配合
 
 之后 `ls ~/feishu` 就能看到云盘内容了。不挂载也可以直接用 `rclone lsf feishu:` 浏览，或者任何 WebDAV 客户端连接。
 
@@ -72,7 +78,7 @@ rclone mount feishu: ~/feishu --vfs-cache-mode writes --daemon
 * **在线文档**：docx/sheet/bitable/slides 这类飞书在线文档没有实体文件，feishu-dav 把它们映射为只读虚拟文件，目录里显示为 `文档名.docx/xlsx/pdf`（内容是导出产物），导出结果缓存在 `~/.feishu-dav/export_cache/` 避免重复导出。飞书导出 API 不支持 markdown，所以没有 md 格式可选
 * **别人共享的文件夹**：在向导里把该文件夹 URL 中的 folder_token 加为挂载点即可
 * **安全控制**：删除操作默认禁止（需 `--allow-delete` 开启）；`--read-only` 模式下一切写操作返回 403。放在团队共享场景下建议只读挂载
-* **性能**：目录列表有 60s TTL 缓存，写操作后主动失效；在线文档采用 lazy 导出——列目录零导出、秒级返回（有缓存的报真实大小，未缓存的不报大小），首次 GET 下载时才真正导出并写缓存（有效期 24h），之后列目录和挂载打开都正常。代价是 rclone 对未缓存文档按空文件处理，挂载场景首次访问前需要 curl 预热一次；普通文件的大小由后台线程异步探测，下次刷新生效
+* **性能**：目录列表有 60s TTL 缓存，写操作后主动失效；在线文档采用 lazy 导出 + 10K 哨兵——列目录零导出、秒级返回，未缓存文档报 10K 占位大小（非 0 大小才能让 rclone 打开时真正发起 GET），首次打开时才导出并写缓存（24h 有效）。代价是未缓存文档第一次打开读到 10K 截断内容（同时也触发了导出），配合挂载参数 `--dir-cache-time 3s` 很快就能重开拿到完整内容；普通文件的大小由后台线程异步探测，下次刷新生效
 * **同名文件**：飞书云盘允许同名，WebDAV 路径不允许，所以同名文件会显示为 `name~token前8位`
 
 # 踩过的坑
